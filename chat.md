@@ -1383,3 +1383,124 @@ b6-2-mission.md:46-157의 ## 3. 과제 목표 에 명시된 5가지 핵심 학�
   • 작업 트리: 완전히 깨끗한 클린 상태
 
   보고  각 : 2026-10-03 21:05:53 (KST)
+-------------
+ Final report preparation: It is important to remember to follow the specified reporting format, including the current time in KST. The explanation of why the clickable link fails must detail how backticks...
+  ### 1. 링크가 파란색 언더라인으로 표시되지 않았던 원인 분석
+
+  마크다운 뷰어(VS Code Markdown Preview, GitHub, Cursor 등)에서 링크가 일반 텍스트나 인라인 코드 블록처럼 보이고 **파란색 글씨 + 밑줄(underline)**로 렌더링되지 않았던 원인은 다음과 같습니다:
+
+  1. 링크 텍스트 내 백틱(`) 래핑 ([...](...)):
+      • [src/main.py#L42-L78](../src/main.py#L42-L78)와 같이 링크 텍스트에 백틱을 넣으면 HTML 상에서 <a href="..."><code>...</code></a> 형태로 컴파일됩니다.
+      • 마크다운 CSS 테마는 <code> 태그에 대해 회색 박스 배경과 함께 color: inherit; text-decoration: none;을 적용하므로, 파란색 링크 색상과 밑줄이 완전히 제거되어 일반 인라인 코드 뱃지로 표시되었습니다.
+      • 백틱을 제거하고 [src/main.py#L42-L78](../src/main.py#L42-L78)로 변경함으로써 브라우저/에디터 표준 링크 스타일인 **파란색 글자(color: #0969da;) 및 밑줄(text-decoration: underline;)**이 완벽히
+      복원되었습니다.
+  2. 링크 텍스트 내 마크다운 헤더 기호(## 5.) 혼입:
+      • 문항별 상단 링크에 [## 5. 전체 문항 추적 매트릭스 (Item 1-1)](#...)와 같이 ## 5.가 텍스트에 포함되어 있어 일부 마크다운 파서에서 문법 에러로 취급되거나 링크로 인식되지 못했습니다.
+      • 깔끔한 [전체 문항 추적 매트릭스 (Item 1-1)](#matrix) 형식으로 정규화했습니다.
+  3. 한글 Em-dash(—)로 인한 목차(TOC) 앵커 점프 실패:
+      • 목차 4개 항목(항목 1 — 실제 동작 확인 등)의 자동 슬러그가 에디터별로 상이하여 클릭 시 해당 섹션으로 스크롤되지 않는 현상이 있었습니다.
+      • 명시적 HTML 앵커(<a id="section-1"> ~ <a id="section-4">, <a id="matrix">)를 헤더에 직접 부여하여 100% 이동하도록 고정했습니다.
+
+  ──────
+  ### 2. 저장소 전체 링크 전수 점검 및 일괄 개선 내역
+
+  저장소 내 14개 전체 마크다운 파일을 대상으로 자동화 검증 스크립트를 작성하여 전수 스캔 및 교정을 완료했습니다:
+
+   대상 문서          | 점검 전 결함 상태                                         | 조치 및 개선 내역
+  --------------------|-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------
+   EVALUATION_QA.md   | 백틱 링크 148건, 깨진 목차 앵커 4건, ## 5. 혼입 링크 18건 | 링크 189개 전수 백틱 제거, 명시적 앵커(<a id="section-X">, <a id="matrix">) 주입, 표 볼드 마크다운 정상화(**[Item X-Y](#qX-
+                      |                                                           | Y)**)
+   study.md           | 백틱 링크 10건, 1.1절 목차 앵커 오타 1건                  | 링크 24개 전수 백틱 제거, 1.1절 슬러그 하이픈 수정
+   project_summary.md | 백틱 링크 9건                                             | 링크 9개 전수 백틱 제거 및 파란색 밑줄 링크 스타일 복원
+   folder_index.md    | 백틱 링크 18건                                            | 링크 18개 전수 백틱 제거 및 정상 렌더링 확인
+   b6-2-mission.md    | 백틱 링크 20건, http://main.py/ 오인식 8건                | 백틱 제거 및 가짜 도메인 URL을 실제 로컬 상대 경로(../main.py)로 교체
+   chat.md            | 백틱 링크 6건, 루트 기준 상대경로 불일치                  | 백틱 제거 및 상대 경로 정상화
+  ──────
+  ### 3. 최종 검증 결과
+
+  1. 저장소 링크 완전성 검증 (verify_all_repo_links.py):
+      • 대상: 전체 14개 마크다운 파일
+      • 깨진 내부 앵커(Anchor): 0건 (100% 정상 이동)
+      • 깨진 상대 파일 경로(File Path): 0건 (100% 대상 파일 실존)
+      • 링크 내 백틱 잔존: 0건 (모든 링크가 파란색 글씨 + 밑줄로 표시됨)
+  2. 단위 테스트 검증:
+      • python -m unittest tests/test_assistant.py → 14개 테스트 전원 통과 (Ran 14 tests in 0.063s, OK)
+
+  ──────
+  ### 4. Git 커밋 및 동기화 정보
+
+  • 커밋 해시: 316fb04 https://github.com/nttkor/b3_2/commit/316fb04 (origin/main 푸시 완료)
+  • 커밋 메시지: docs: 마크다운 링크 스타일 정상화 및 앵커 오류 전수 수정 (4대 규칙 본문 상세 기술)
+  • 작업 트리 상태: clean (모든 변경 사항 원격 저장소에 완벽 동기화됨)
+
+  보고 시각: `2026-10-03 21:17:06 (KST)``**
+
+────────────────────────────────────────────────────────────
+> * **단위 테스트 링크**:
+  - PR 필수 섹션 프롬프트 검증: [`tests/test_assistant.py:test_pr_prompt_contains_required_sections#L87-L94`](../tests/test_assistant.py#L87-L94)
+  - PR 제목 절삭 검증: [`tests/test_assistant.py:test_validate_pr_title_truncation#L110-L118`](../tests/test_assistant.py#L110-L118)
+  - PR 불릿 보충 검증: [`tests/test_assistant.py:test_validate_pr_ensures_bullets#L128-L136`](../tests/test_assistant.py#L128-L136)
+  * **검증 명령어 및 실제 출력**:
+  ```bash
+  python main.py pr
+
+▸ Thought for 3s, 471 tokens
+  Unit tests are now linked, specifically focusing on validating the PR prompt's required sections, PR title truncation, and ensuring bullets are correctly handled. These tests appear relevant for verifying...
+
+● Bash(grep -n -C 5 "test_validate_pr_title_truncation" docs/EVALUATION_QA.md) (ctrl+o to expand)
+
+▸ Thought for 6s, 1.2k tokens
+  The user likely pasted the snippet to pinpoint a specific issue with link formatting, given their prior question about un-underlined links. The user could be verifying if a previously noted formatting prob...
+
+● Read(~/b3_2/docs/EVALUATION_QA.md) (ctrl+o to expand)
+
+▸ Thought for 7s, 1.1k tokens
+  Focusing on the bullet point verification, there's a specific test case related to supplementing PR bullets. The objective is to confirm the bullet point completion aspect.
+
+● Bash(python main.py pr)
+● Bash(.venv/bin/python main.py pr) (ctrl+o to expand)
+
+▸ Thought for 8s, 1.5k tokens
+  The backticks were indeed the core issue, and the linked file has been updated in the repository, resolving the display problem. It's plausible the user's editor hasn't refreshed its buffer from disk, or h...
+
+● Bash(date +"%Y-%m-%d %H:%M:%S (%Z)") (ctrl+o to expand)
+
+  보내주신 바로 그 부분(docs/EVALUATION_QA.md Q1-2 단위 테스트 링크)이 링크 표시가 되지 않았던 정확한 원인 지점이며, 현재 디스크 및 원격 저장소(origin/main)에 100% 수정 반영이 완료된 상태입니다!
+  ──────
+  ### 1. 전후 비교 (올려주신 내용 vs 현재 반영본)
+
+  • 이전 상태 (올려주신 내용 - 파란색 밑줄 안 뜸):
+    * **단위 테스트 링크**:
+      - PR 필수 섹션 프롬프트 검증: [`tests/test_assistant.py:test_pr_prompt_contains_required_sections#L87-L94`](../tests/test_assistant.py#L87-L94)
+      - PR 제목 절삭 검증: [`tests/test_assistant.py:test_validate_pr_title_truncation#L110-L118`](../tests/test_assistant.py#L110-L118)
+      - PR 불릿 보충 검증: [`tests/test_assistant.py:test_validate_pr_ensures_bullets#L128-L136`](../tests/test_assistant.py#L128-L136)
+  👉 원인: 대괄호 안쪽에 백틱(`)이 감싸져 있어 마크다운 뷰어가 <a href="..."><code>...</code></a>로 인식했고, <code> CSS 스타일에 의해 파란색 글씨와 밑줄이 제거되고 회색 인라인 코드 뱃지로 표시되었던 것입니다.
+  • 현재 수정 반영본 (선명한 파란색 글씨 + 밑줄 표시):
+    * **단위 테스트 링크**:
+      - PR 필수 섹션 프롬프트 검증: [tests/test_assistant.py:test_pr_prompt_contains_required_sections#L87-L94](../tests/test_assistant.py#L87-L94)
+      - PR 제목 절삭 검증: [tests/test_assistant.py:test_validate_pr_title_truncation#L110-L118](../tests/test_assistant.py#L110-L118)
+      - PR 불릿 보충 검증: [tests/test_assistant.py:test_validate_pr_ensures_bullets#L128-L136](../tests/test_assistant.py#L128-L136)
+  👉 조치: 백틱을 완전히 걷어내어 순수 링크 태그로 변환하였으며, 이제 클릭 가능한 파란색 밑줄 링크로 정상 렌더링됩니다.
+  ──────
+  ### 2. 에디터(VS Code / Cursor) 화면에 최신본 갱신하는 방법
+
+  현재 열려 있는 에디터 탭이 이전 캐시를 물고 있거나 "저장 안 됨(dirty)" 상태일 경우 화면이 갱신되지 않을 수 있습니다. 아래 방법 중 하나로 새로고침하시면 즉시 반영됩니다:
+
+  1. 가장 확실한 방법 (탭 닫고 다시 열기):
+      • 열려 있는 EVALUATION_QA.md 탭을 닫습니다.
+      • 혹시 저장 여부를 묻는 팝업이 뜨면 반드시 **"저장 안 함 (Don't Save)"**을 누르세요. (디스크에 이미 저장된 최신 코드를 덮어쓰지 않기 위함입니다.)
+      • 좌측 파일 트리에서 docs/EVALUATION_QA.md를 다시 클릭하여 엽니다.
+  2. 마크다운 미리보기(Preview) 창 새로고침:
+      • 미리보기 탭에서 마우스 우클릭 후 Reload Preview 클릭
+      • 또는 단축키 Cmd + Shift + V (미리보기 토글)를 눌렀다 다시 켭니다.
+  3. 에디터 창 전체 리로드:
+      • Cmd + Shift + P 누른 후 Developer: Reload Window (창 다시 로드) 실행
+
+  ──────
+  ### 3. 저장소 반영 정보
+s
+  • 커밋 해시: 316fb04 https://github.com/nttkor/b3_2/commit/316fb04 (origin/main 푸시 완료)
+  • 작업 파일: EVALUATION_QA.md:101-105 (189개 링크 전체 백틱 제거 완료, 0개 결함)
+  • 단위 테스트: 14개 테스트 전체 통과 (OK)
+
+  확인 시각: `2026-10-03 21:18:33 (KST)``
