@@ -587,13 +587,42 @@
 
 > 📊 **동료평가 추적 매트릭스**: [전체 문항 추적 매트릭스 (Item 4-3)](#matrix)
 
-* **핵심 답변**: **가장 먼저 `Git Pre-commit Hook 연동` 및 `대화형 확인/편집 모드 (Interactive Mode)`를 추가하고 싶습니다.**
+* **핵심 답변**: **가장 먼저 `Staged와 Unstaged diff의 명확한 구획화 및 Staged 우선순위 정책`을 적용하여 할루시네이션을 방지하고, 이어서 `Git Pre-commit Hook 연동` 및 `대화형 확인/편집 모드`를 추가하고 싶습니다.**
 * **상세 설명**:
-  - **1순위 (Git Pre-commit Hook & Interactive CLI)**:
+  - **1순위 (Staged / Unstaged diff 명확한 구획화 및 Staged 최우선 정책)**:
+    - **현재 코드의 한계점 ([src/git_collector.py#L135-L140](../src/git_collector.py#L135-L140))**:
+      ```python
+      # src/git_collector.py (현재 구현: 단순 + 결합)
+      if not diff:
+          staged = self._run(['git', 'diff', '--cached'])
+          unstaged = self._run(['git', 'diff'])
+          diff = (staged + unstaged).strip()
+      ```
+      - 현재 구현은 `staged` 문자열과 `unstaged` 문자열을 단순 `+` 연산자로 이어 붙이기만 합니다.
+      - 중간에 구분자나 헤더가 전혀 없기 때문에, 최종 데이터를 전달받는 **AI 입장에서는 어떤 코드가 `git add` 된 상태이고 어떤 코드가 아직 미등록 상태인지 전혀 구분할 수 없습니다.**
+    - **발생하는 3대 문제점**:
+      1. *커밋 대상 불일치 및 할루시네이션*: `git commit`은 본질적으로 Staged 파일만 커밋하지만, AI는 아직 `add`하지 않은 로컬 작업 트리 변경분까지 섞어서 커밋 메시지를 작성해버립니다.
+      2. *동일 파일 중복 출현에 따른 혼란*: 한 파일을 `add`한 뒤 추가 수정한 경우 동일 파일의 diff 블록이 연달아 2번 나타나 AI가 어떤 hunk가 유효한지 파싱에 혼란을 겪습니다.
+      3. *상태 메타데이터 유실*: Index(Staging Area)와 Working Tree라는 Git의 2단계 상태 모델이 소실됩니다.
+    - **개선 코드 (Proposed Architecture Fix)**:
+      ```python
+      # 개선안: 명확한 상태 헤더 분리 및 정교한 컨텍스트 주입
+      if not diff:
+          staged = self._run(['git', 'diff', '--cached']).strip()
+          unstaged = self._run(['git', 'diff']).strip()
+          parts = []
+          if staged:
+              parts.append(f"--- STAGED CHANGES (git add 완료) ---\n{staged}")
+          if unstaged:
+              parts.append(f"--- UNSTAGED CHANGES (작업 트리 수정본) ---\n{unstaged}")
+          diff = "\n\n".join(parts)
+      ```
+  - **2순위 (Git Pre-commit Hook & Interactive CLI)**:
     - *근거*: 현재는 터미널에 텍스트를 출력하고 사용자가 복사해야 하지만, `.git/hooks/prepare-commit-msg`와 연동하여 `git commit` 명령 시 자동으로 AI 초안을 Vim/Nano 에디터에 기본 커밋 메시지로 채워주면 사용자가 1초 만에 확인·수정·저장할 수 있어 생산성이 비약적으로 상승합니다.
-  - **2순위 (GitHub CLI `gh pr create` 자동 연계)**:
+  - **3순위 (GitHub CLI `gh pr create` 자동 연계)**:
     - *근거*: 생성된 PR 제목과 본문을 GitHub 공식 CLI(`gh pr create --title "..." --body "..."`)로 직접 연동하여 원클릭으로 원격 PR 생성을 자동 완료하는 파이프라인을 완성할 수 있습니다.
 * **관련 소스코드 및 아키텍처 링크**:
+  - 현재 Staged/Unstaged 수집 로직: [src/git_collector.py#L135-L140](../src/git_collector.py#L135-L140)
   - CLI 파서 확장 진입점: [src/main.py#L249-L264](../src/main.py#L249-L264)
   - 서브프로세스 확장 지점: [src/git_collector.py#L71-L88](../src/git_collector.py#L71-L88)
   - 실무 적용 우선순위 로드맵: [study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-mainpy](../study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-mainpy)
@@ -621,4 +650,4 @@
 | **[Item 3-4](#q3-4)** | 후처리 vs 재생성 선택 이유 | [src/validator.py](../src/validator.py#L50-L137) | [study/study.md#35-왜-재생성retry-대신-후처리post-processing를-선택했는가](../study/study.md#35-왜-재생성retry-대신-후처리post-processing를-선택했는가) |
 | **[Item 4-1](#q4-1)** | AI 텍스트 검토 필요성 | [src/main.py#L124-L131](../src/main.py#L124-L131) | [README.md#4-안전-모드-safe-mode-및-보안-정책](../README.md#4-안전-모드-safe-mode-및-보안-정책) |
 | **[Item 4-2](#q4-2)** | Git diff 민감정보 마스킹 | [src/git_collector.py:_SENSITIVE](../src/git_collector.py#L27-L47) | [tests/test_assistant.py:test_safe_mode_masking](../tests/test_assistant.py#L29-L47) |
-| **[Item 4-3](#q4-3)** | 실무 개선 우선순위 | [src/main.py#L249-L264](../src/main.py#L249-L264) | [study/project_summary.md](../study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-mainpy) |
+| **[Item 4-3](#q4-3)** | 실무 개선 우선순위 | [src/git_collector.py#L135-L140](../src/git_collector.py#L135-L140), [src/main.py#L249-L264](../src/main.py#L249-L264) | [study/project_summary.md](../study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-mainpy) |

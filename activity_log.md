@@ -145,6 +145,13 @@
     - Fix: Refactored code blocks in Q1-1 and Q1-2 to clean, properly indented print statements.
     - Verified directly against GitHub's live Markdown API (`https://api.github.com/markdown`): confirmed 0 unrendered markdown links and exactly 189 `<a href="...">` hyperlinks generated.
   - Verified 14/14 unit tests passing.
+- **2026-10-03 22:15 (KST)**:
+  - Enriched Item 4-3 in `docs/EVALUATION_QA.md` with Staged vs Unstaged diff analysis and proposed code fix:
+    - Retained source code unchanged per user request (`src/` untouched).
+    - Added comprehensive 1st priority roadmap: addressed the lack of delimiters between `staged` and `unstaged` in `src/git_collector.py#L135-L140`, preventing LLM hallucination and duplicate diff hunk confusion.
+    - Added concrete proposed architecture fix code snippet and updated Section 5 Traceability Matrix table.
+  - Verified with live GitHub Markdown API (192/192 `<a href=...>` links generated, 0 unrendered links).
+  - Verified 14/14 unit tests passing.
 
 
 
