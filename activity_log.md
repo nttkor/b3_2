@@ -18,10 +18,12 @@
   - `validator.py`: Post-processor enforcing title length (50/72 chars, 80 chars) and ensuring all PR sections with bullet points.
   - `convention.py`: Loads `.ai-gitgen.yml` configuration.
   - `README.md`: User guide documentation.
-- `ref_site/`:
-  - Contains Round 01 Mini Git codebase (`mini_git/`) and requirements. Not the AI assistant codebase, but can serve as a reference or test target.
 - `tests/`:
   - `test_assistant.py`: Comprehensive test suite for `GitCollector`, `AIClient`, `PromptBuilder`, `Validator`, and CLI option parsing.
+- `docs/`:
+  - `EVALUATION_PLAN.md`: 6-step evaluation plan for peer review.
+  - `EVALUATION.md`: Original peer evaluation questions.
+  - `CONVENTIONS.md`: Commit message standards (Why, What, Impact, Verification).
 
 ## 3. Execution History & Status
 - **2026-10-03 (KST)**:
@@ -33,7 +35,7 @@
     - Added single-dash flag support (`-temperature`, `-max-tokens`, etc.) in `src/main.py`.
     - Created root `main.py` entry point.
     - Enhanced `src/validator.py` with bullet enforcement and section completion.
-  - Authored comprehensive evaluation plan: `doc/EVALUATION_PLAN.md`.
+  - Authored comprehensive evaluation plan: `docs/EVALUATION_PLAN.md`.
   - Created automated test suite: `tests/test_assistant.py` (13 tests all passing).
 - **2026-10-03 16:58 (KST)**:
   - Configured `.env` with Codyssey OpenAI proxy endpoint (`https://copa.codyssey.kr/v1`).
@@ -52,3 +54,9 @@
 - **2026-10-03 17:12 (KST)**:
   - Unified `doc` and `docs` into a single `docs/` directory per user request (`git mv doc docs`).
   - Removed legacy symlink and updated all markdown file references.
+- **2026-10-03 17:25 (KST)**:
+  - User updated `.env` with personal Codyssey API key (`sk-cody-live-...`).
+  - Formatted `.env` into clean standard environment variable syntax (`AI_API_KEY`, `AI_API_BASE_URL`, `AI_MODEL`) to eliminate `python-dotenv` parsing warnings.
+  - Verified live execution of `python main.py commit` with `gpt-5.4-mini` (1.8s, full success).
+  - Deleted obsolete `ref_site/` directory (commit `443ee22`) and added `chat.md` (commit `e9249b8`).
+  - Synchronized and pushed all commits to remote GitHub repository (`https://github.com/nttkor/b3_2`). Working directory clean.
