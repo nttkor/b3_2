@@ -94,3 +94,6 @@
   - Authored detailed implementation answers for Section 4 (기능 요구 사항 4.1 ~ 4.6) in `docs/b6-2-mission.md`.
   - Applied GitHub-compatible relative paths (`../src/git_collector.py`, `../src/ai_client.py`, `../src/validator.py`, `../README.md`, etc.) for seamless navigation on GitHub web.
   - Linked verification commands, live output examples, and peer review item mappings across all subsections.
+- **2026-10-03 18:02 (KST)**:
+  - Removed obsolete legacy `docs/README.md` (Mini Git project documentation) to eliminate confusion.
+  - Confirmed repository root `README.md` serves as the sole, authoritative project documentation.
