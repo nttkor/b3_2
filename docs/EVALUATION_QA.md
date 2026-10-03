@@ -41,9 +41,9 @@
       prompt = build_commit_prompt(status, diff, convention)
       result = client.generate(prompt)
       commit_msg = validate_commit(result)
-      print('--- Commit Message ---
-' + commit_msg + '
-----------------------')
+      print('--- Commit Message ---')
+      print(commit_msg)
+      print('----------------------')
   ```
 * **단위 테스트 링크**:
   - Git 수집기 정상 동작 테스트: [tests/test_assistant.py:test_is_git_repo#L25-L27](../tests/test_assistant.py#L25-L27)
@@ -92,11 +92,11 @@
       prompt = build_pr_prompt(status, diff, branch, convention)
       result = client.generate(prompt)
       title, body = validate_pr(result)
-      print('--- PR Title ---
-' + title + '
---- PR Body ---
-' + body + '
----------------')
+      print('--- PR Title ---')
+      print(title)
+      print('--- PR Body ---')
+      print(body)
+      print('---------------')
   ```
 * **단위 테스트 링크**:
   - PR 필수 섹션 프롬프트 검증: [tests/test_assistant.py:test_pr_prompt_contains_required_sections#L87-L94](../tests/test_assistant.py#L87-L94)

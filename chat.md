@@ -1504,3 +1504,52 @@ s
   • 단위 테스트: 14개 테스트 전체 통과 (OK)
 
   확인 시각: `2026-10-03 21:18:33 (KST)``
+
+  ------------
+   Preparing the final response, I need to ensure adherence to a specific format. I've identified the modified files requiring inclusion with clickable links. The listed files cover key areas: code style, pro...
+  src/ 디렉토리 내의 모든 파이썬 소스코드 파일 최상단에 모듈 개요(Module Docstring)를 추가하고, 모든 함수·클래스·메서드에 상세 독스트링(Args, Returns, Raises) 및 단계별 코드 주석을 보강 완료했습니다.
+
+  또한 주석/독스트링 추가로 인해 변경된 파일 라인 번호를 정밀 재계산하여, EVALUATION_QA.md 내의 83개 소스코드 라인 링크를 최신 위치로 100% 완벽 동기화했습니다.
+  ──────
+  ### 1. 파일별 모듈 개요 및 독스트링·주석 보강 내역
+
+   파일 경로         | 최상단 모듈 개요 및 아키텍처 역할                                               | 함수/메서드 독스트링 (Args, Returns, Raises) 및 주석
+  -------------------|---------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------
+   convention.py     | 컨벤션 파일(.ai-gitgen.yml) 파싱 및 미설치/파일 부재 시 무중단 폴백 구조 명시   | load(): 경로 탐색, safe_load 보안 파싱, 딕셔너리 언패킹 병합({**DEFAULTS, ...}) 단계별 주석 추가
+   prompt_builder.py | LLM 추론 유도(Inference Guidance) 및 Git 컨텍스트 격리 원칙 명시                | build_commit_prompt(), build_pr_prompt(): 언어 설정, 접두어 규칙 생성, 섹션 템플릿 마크다운 조립 주석
+                     |                                                                                 | 보강
+   validator.py      | 결정론적 사후 검증(Deterministic Post-processing)과 하드 슬라이싱 아키텍처 명시 | validate_commit()(50/72자 하드 컷), validate_pr()(80자 컷, Why/What/How to Test 필수 섹션 및 불릿 자동
+                     |                                                                                 | 복구) 주석 추가
+   ai_client.py      | OpenAI 호환 REST API 게이트웨이 통신 및 표준 에러 핸들링 구조 명시              | AIClient, __init__()(API Key 우선순위 탐색, 엔드포인트 자동 라우팅), generate()(5대 예외 처리 및
+                     |                                                                                 | sys.exit(1)) 주석 추가
+   git_collector.py  | Git 메타데이터 수집 책임 분리 및 9종 민감정보 마스킹 보안 정책 명시             | GitCollector 및 8개 메서드(is_git_repo, get_diff, _apply_safe 등)에 정규식 치환 및 diff 파일/라인 절삭
+                     |                                                                                 | 주석 보강
+   main.py           | CLI 명령 디스패처, 가상환경 부트스트랩, 파이프라인 조율 역할 명시               | cmd_commit(), cmd_pr(), build_parser(), main(): 변경 감지 조기 종료, 단일/이중 대시 옵션 상속, 구획
+                     |                                                                                 | 출력 주석 추가
+   main.py (루트)    | 프로젝트 루트 엔트리포인트 및 sys.prefix 기반 가상환경 자동 재실행 명시         | os.execv 프로세스 치환 및 src/ 디렉토리의 sys.path 주입 메커니즘 상세 주석 추가
+  ──────
+  ### 2. 동료평가 문서 링크 무결성 동기화
+
+  코드 주석 및 독스트링 추가로 파일 길이가 확장됨에 따라, EVALUATION_QA.md에서 소스코드의 특정 함수 및 라인 번호를 가리키던 총 83개 링크를 새로운 라인 범위로 일괄 자동 갱신했습니다:
+
+  • src/main.py:cmd_commit : #L42-L78 ➔ #L74-L132
+  • src/main.py:cmd_pr : #L80-L118 ➔ #L135-L195
+  • src/git_collector.py:get_diff : #L56-L77 ➔ #L109-L152
+  • src/prompt_builder.py:build_commit_prompt : #L1-L30 ➔ #L17-L67
+  • src/prompt_builder.py:build_pr_prompt : #L33-L61 ➔ #L70-L121
+  • src/validator.py:validate_commit : #L9-L30 ➔ #L32-L64
+  • src/validator.py:validate_pr : #L32-L89 ➔ #L67-L137
+  • src/ai_client.py:AIClient : #L15-L74 ➔ #L30-L136
+  ──────
+  ### 3. 검증 결과
+
+  1. 단위 테스트: python -m unittest tests/test_assistant.py → 14개 테스트 전원 통과 (Ran 14 tests in 0.059s, OK)
+  2. 실제 CLI 동작 테스트: python main.py commit 실행 → 정상적인 컨벤션 로드 및 2초 내 커밋 메시지 초안 생성 확인
+  3. 규칙 준수: 전역 규칙(Rule 4)에 따라 기존 로직 및 기존 주석 100% 보존 완료
+  ──────
+  ### 4. Git 커밋 및 동기화 정보
+  • 커밋 해시: e85d80d https://github.com/nttkor/b3_2/commit/e85d80d (origin/main 푸시 완료)
+  • 커밋 메시지: docs: src 소스코드 전 파일에 모듈 개요·함수 독스트링·상세 주석 추가
+  • 작업 메모리 기록: activity_log.md:137-142 최신화 완료
+
+  완료 시각: 2026-10-03 21:40:04 (KST)

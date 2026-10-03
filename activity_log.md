@@ -139,6 +139,12 @@
   - 100% preserved all existing logic and comments.
   - Recalculated symbol positions and updated all 83 line number links in `docs/EVALUATION_QA.md` to ensure exact line accuracy.
   - Verified with automated tests (14/14 tests passing) and live CLI execution (`python main.py commit`).
+- **2026-10-03 21:53 (KST)**:
+  - Resolved GitHub Markdown rendering defect in Q1-1 and Q1-2:
+    - Root cause: In Q1-1 and Q1-2, code snippets had raw multiline string literals with column-0 lines (`----------------------')`). Under CommonMark (cmark-gfm), this triggered Setext heading parsing, caused the closing fence to become an opening fence, and swallowed `* **단위 테스트 링크**:` into a literal `<pre><code>` block.
+    - Fix: Refactored code blocks in Q1-1 and Q1-2 to clean, properly indented print statements.
+    - Verified directly against GitHub's live Markdown API (`https://api.github.com/markdown`): confirmed 0 unrendered markdown links and exactly 189 `<a href="...">` hyperlinks generated.
+  - Verified 14/14 unit tests passing.
 
 
 
