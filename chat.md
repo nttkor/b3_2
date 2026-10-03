@@ -1437,9 +1437,9 @@ b6-2-mission.md:46-157의 ## 3. 과제 목표 에 명시된 5가지 핵심 학�
 
 ────────────────────────────────────────────────────────────
 > * **단위 테스트 링크**:
-  - PR 필수 섹션 프롬프트 검증: [`tests/test_assistant.py:test_pr_prompt_contains_required_sections#L87-L94`](../tests/test_assistant.py#L87-L94)
-  - PR 제목 절삭 검증: [`tests/test_assistant.py:test_validate_pr_title_truncation#L110-L118`](../tests/test_assistant.py#L110-L118)
-  - PR 불릿 보충 검증: [`tests/test_assistant.py:test_validate_pr_ensures_bullets#L128-L136`](../tests/test_assistant.py#L128-L136)
+  - PR 필수 섹션 프롬프트 검증: [tests/test_assistant.py:test_pr_prompt_contains_required_sections#L87-L94](../tests/test_assistant.py#L87-L94)
+  - PR 제목 절삭 검증: [tests/test_assistant.py:test_validate_pr_title_truncation#L110-L118](../tests/test_assistant.py#L110-L118)
+  - PR 불릿 보충 검증: [tests/test_assistant.py:test_validate_pr_ensures_bullets#L128-L136](../tests/test_assistant.py#L128-L136)
   * **검증 명령어 및 실제 출력**:
   ```bash
   python main.py pr
@@ -1471,9 +1471,9 @@ b6-2-mission.md:46-157의 ## 3. 과제 목표 에 명시된 5가지 핵심 학�
 
   • 이전 상태 (올려주신 내용 - 파란색 밑줄 안 뜸):
     * **단위 테스트 링크**:
-      - PR 필수 섹션 프롬프트 검증: [`tests/test_assistant.py:test_pr_prompt_contains_required_sections#L87-L94`](../tests/test_assistant.py#L87-L94)
-      - PR 제목 절삭 검증: [`tests/test_assistant.py:test_validate_pr_title_truncation#L110-L118`](../tests/test_assistant.py#L110-L118)
-      - PR 불릿 보충 검증: [`tests/test_assistant.py:test_validate_pr_ensures_bullets#L128-L136`](../tests/test_assistant.py#L128-L136)
+      - PR 필수 섹션 프롬프트 검증: [tests/test_assistant.py:test_pr_prompt_contains_required_sections#L87-L94](../tests/test_assistant.py#L87-L94)
+      - PR 제목 절삭 검증: [tests/test_assistant.py:test_validate_pr_title_truncation#L110-L118](../tests/test_assistant.py#L110-L118)
+      - PR 불릿 보충 검증: [tests/test_assistant.py:test_validate_pr_ensures_bullets#L128-L136](../tests/test_assistant.py#L128-L136)
   👉 원인: 대괄호 안쪽에 백틱(`)이 감싸져 있어 마크다운 뷰어가 <a href="..."><code>...</code></a>로 인식했고, <code> CSS 스타일에 의해 파란색 글씨와 밑줄이 제거되고 회색 인라인 코드 뱃지로 표시되었던 것입니다.
   • 현재 수정 반영본 (선명한 파란색 글씨 + 밑줄 표시):
     * **단위 테스트 링크**:

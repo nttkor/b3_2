@@ -68,6 +68,8 @@
 
   [INFO] 모델: gpt-5.4-mini  |  호출 횟수: 1
   ```
+* 📖 **심층 기술 분석 문서**:
+  - 가상환경 자동 부트스트랩 원리(`sys.prefix` vs `sys.executable`) 및 `os.execv` 프로세스 치환 기술은 **[study/study.md 제5장](../study/study.md#section-5)**에 상세히 정리되어 있습니다.
 
 ---
 
@@ -295,7 +297,7 @@
   - PR 제목 80자 절삭 단위 테스트: [tests/test_assistant.py:test_validate_pr_title_truncation#L110-L118](../tests/test_assistant.py#L110-L118)
   - PR 불릿 보정 단위 테스트: [tests/test_assistant.py:test_validate_pr_ensures_bullets#L128-L136](../tests/test_assistant.py#L128-L136)
 * 📖 **심층 기술 분석 문서**:
-  - 규칙 충족 매트릭스, Mermaid 협업 아키텍처 다이어그램, 재생성 대신 후처리를 선택한 상세 근거는 **[study/study.md 제3장](../study/study.md#3-커밋pr-규칙-준수를-위한-이중-안전장치-프롬프트-vs-사후-검증기-q1-7-심층)**에 상세히 정리되어 있습니다.
+  - 규칙 충족 매트릭스, Mermaid 협업 아키텍처 다이어그램, 재생성 대신 후처리를 선택한 상세 근거는 **[study/study.md 제3장](../study/study.md#section-3)**에 상세히 정리되어 있습니다.
 
 ---
 
@@ -326,6 +328,8 @@
 * **단위 테스트 링크**:
   - Git 수집기 전용 단위 테스트 클래스: [tests/test_assistant.py:TestGitCollector#L19-L57](../tests/test_assistant.py#L19-L57)
   - AI 클라이언트 전용 단위 테스트 클래스: [tests/test_assistant.py:TestAIClient#L59-L75](../tests/test_assistant.py#L59-L75)
+* 📖 **심층 기술 분석 문서**:
+  - Git 변경 사항 수집 아키텍처 및 Staged/Unstaged 분리 원리는 **[study/study.md 제4장](../study/study.md#section-4)**에, 가상환경 자동 부트스트랩 원리는 **[study/study.md 제5장](../study/study.md#section-5)**에 상세히 정리되어 있습니다.
 
 ---
 
@@ -376,6 +380,8 @@
   ```
 * **단위 테스트 링크**:
   - CLI 옵션 파싱 전체 테스트: [tests/test_assistant.py:TestCLIParser#L138-L165](../tests/test_assistant.py#L138-L165)
+* 📖 **심층 기술 분석 문서**:
+  - 단일 대시(`-temperature`)와 이중 대시(`--temperature`) 동시 지원 및 `argparse.SUPPRESS`를 활용한 서브파서 기본값 충돌 방지 아키텍처는 **[study/study.md 제7장](../study/study.md#section-7)**에 상세히 정리되어 있습니다.
 
 ---
 
@@ -549,7 +555,7 @@
   print('----------------------')
   ```
 * **관련 문서 링크**:
-  - 안전성 운영 원칙: [README.md#4-안전-모드-safe-mode-및-보안-정책](../README.md#4-안전-모드-safe-mode-및-보안-정책)
+  - 안전성 운영 원칙: [README.md#53-생성-결과-검토-원칙](../README.md#53-생성-결과-검토-원칙)
 
 ---
 
@@ -580,6 +586,8 @@
 * **단위 테스트 링크**:
   - 민감정보 마스킹 단위 테스트: [tests/test_assistant.py:test_safe_mode_masking#L29-L47](../tests/test_assistant.py#L29-L47)
   - 안전 모드 라인 수 절삭 단위 테스트: [tests/test_assistant.py:test_safe_mode_line_truncation#L48-L57](../tests/test_assistant.py#L48-L57)
+* 📖 **심층 기술 분석 문서**:
+  - 9종 정규식 보안 마스킹 패턴, ReDoS 방지 설계, `diff --git` 청크 분할 및 대량 변경 절삭 알고리즘은 **[study/study.md 제6장](../study/study.md#section-6)**에 상세히 정리되어 있습니다.
 
 ---
 
@@ -625,7 +633,10 @@
   - 현재 Staged/Unstaged 수집 로직: [src/git_collector.py#L135-L140](../src/git_collector.py#L135-L140)
   - CLI 파서 확장 진입점: [src/main.py#L249-L264](../src/main.py#L249-L264)
   - 서브프로세스 확장 지점: [src/git_collector.py#L71-L88](../src/git_collector.py#L71-L88)
-  - 실무 적용 우선순위 로드맵: [study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-mainpy](../study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-mainpy)
+  - 실무 적용 우선순위 로드맵: [study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-terminal-rendering](../study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-terminal-rendering)
+* 📖 **심층 기술 분석 문서**:
+  - Staged vs Unstaged diff 단순 병합의 한계점과 할루시네이션 방지를 위한 상태 헤더 분리 아키텍처 개선안은 **[study/study.md 제4장](../study/study.md#section-4)**에 상세히 정리되어 있습니다.
+  - 실무 적용 우선순위 로드맵 및 단계별 확장 계획은 **[study/project_summary.md](../study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-terminal-rendering)**을 참조하세요.
 
 ---
 
@@ -633,21 +644,21 @@
 
 | 평가 문항 | 핵심 검증 대상 | 구현 소스코드 링크 | 단위 테스트 및 검증 증빙 링크 |
 | :--- | :--- | :--- | :--- |
-| **[Item 1-1](#q1-1)** | 커밋 메시지 자동 생성 | [src/main.py:cmd_commit](../src/main.py#L74-L132) | [tests/test_assistant.py:test_is_git_repo](../tests/test_assistant.py#L25-L27) |
-| **[Item 1-2](#q1-2)** | PR 초안 자동 생성 | [src/main.py:cmd_pr](../src/main.py#L135-L195) | [tests/test_assistant.py:test_pr_prompt_contains_required_sections](../tests/test_assistant.py#L87-L94) |
+| **[Item 1-1](#q1-1)** | 커밋 메시지 자동 생성 | [src/main.py:cmd_commit](../src/main.py#L74-L132) | [tests/test_assistant.py:test_is_git_repo](../tests/test_assistant.py#L25-L27) · [study/study.md#section-5](../study/study.md#section-5) |
+| **[Item 1-2](#q1-2)** | PR 초안 자동 생성 | [src/main.py:cmd_pr](../src/main.py#L135-L195) | [tests/test_assistant.py:test_pr_prompt_contains_required_sections](../tests/test_assistant.py#L87-L94) · [study/study.md#section-4](../study/study.md#section-4) |
 | **[Item 1-3](#q1-3)** | API Key 누락 예외 처리 | [src/ai_client.py:AIClient.__init__](../src/ai_client.py#L43-L89) | [tests/test_assistant.py:test_missing_api_key_exits](../tests/test_assistant.py#L62-L68) |
 | **[Item 1-4](#q1-4)** | 변경 부재 시 조기 종료 | [src/main.py#L83-L85](../src/main.py#L83-L85) | [tests/test_assistant.py:test_is_git_repo](../tests/test_assistant.py#L25-L27) |
 | **[Item 1-5](#q1-5)** | PR 3대 섹션/불릿 강제 | [src/validator.py:validate_pr](../src/validator.py#L106-L137) | [tests/test_assistant.py:test_validate_pr_ensures_bullets](../tests/test_assistant.py#L128-L136) |
-| **[Item 1-6](#q1-6)** | CLI 옵션 동작 (-t, -max-tokens) | [src/main.py:build_parser](../src/main.py#L198-L264) | [tests/test_assistant.py:test_single_dash_options](../tests/test_assistant.py#L151-L158) |
-| **[Item 1-7](#q1-7)** | 커밋/PR 제목 길이 하드 컷 | [src/validator.py:validate_commit](../src/validator.py#L50-L58) | [tests/test_assistant.py:test_validate_commit_title_truncation](../tests/test_assistant.py#L99-L109) |
-| **[Item 2-1](#q2-1)** | Git수집 / AI호출 책임 분리 | [src/git_collector.py](../src/git_collector.py#L50-L227), [src/ai_client.py](../src/ai_client.py#L30-L136) | [tests/test_assistant.py:TestGitCollector](../tests/test_assistant.py#L19-L57) |
-| **[Item 2-2](#q2-2)** | 프롬프트 / 검증기 분리 | [src/prompt_builder.py](../src/prompt_builder.py#L1-L121), [src/validator.py](../src/validator.py#L1-L137) | [tests/test_assistant.py:TestValidator](../tests/test_assistant.py#L96-L136) |
-| **[Item 2-3](#q2-3)** | CLI 옵션화 이유 | [src/main.py:_add_common_arguments](../src/main.py#L207-L248) | [tests/test_assistant.py:TestCLIParser](../tests/test_assistant.py#L138-L165) |
+| **[Item 1-6](#q1-6)** | CLI 옵션 동작 (-t, -max-tokens) | [src/main.py:build_parser](../src/main.py#L198-L264) | [tests/test_assistant.py:test_single_dash_options](../tests/test_assistant.py#L151-L158) · [study/study.md#section-2](../study/study.md#section-2) |
+| **[Item 1-7](#q1-7)** | 커밋/PR 제목 길이 하드 컷 | [src/validator.py:validate_commit](../src/validator.py#L50-L58) | [tests/test_assistant.py:test_validate_commit_title_truncation](../tests/test_assistant.py#L99-L109) · [study/study.md#section-3](../study/study.md#section-3) |
+| **[Item 2-1](#q2-1)** | Git수집 / AI호출 책임 분리 | [src/git_collector.py](../src/git_collector.py#L50-L227), [src/ai_client.py](../src/ai_client.py#L30-L136) | [tests/test_assistant.py:TestGitCollector](../tests/test_assistant.py#L19-L57) · [study/study.md#section-4](../study/study.md#section-4) |
+| **[Item 2-2](#q2-2)** | 프롬프트 / 검증기 분리 | [src/prompt_builder.py](../src/prompt_builder.py#L1-L121), [src/validator.py](../src/validator.py#L1-L137) | [tests/test_assistant.py:TestValidator](../tests/test_assistant.py#L96-L136) · [study/study.md#section-3](../study/study.md#section-3) |
+| **[Item 2-3](#q2-3)** | CLI 옵션화 이유 | [src/main.py:_add_common_arguments](../src/main.py#L207-L248) | [tests/test_assistant.py:TestCLIParser](../tests/test_assistant.py#L138-L165) · [study/study.md#section-7](../study/study.md#section-7) |
 | **[Item 2-4](#q2-4)** | 표준 오류 처리 방식 | [src/ai_client.py:generate](../src/ai_client.py#L123-L136) | [tests/test_assistant.py:test_missing_api_key_exits](../tests/test_assistant.py#L62-L68) |
-| **[Item 3-1](#q3-1)** | Temperature 파라미터 이해 | [src/ai_client.py#L118](../src/ai_client.py#L118) | [study/study.md#2-temperature와-max-tokens-옵션-변경-시-출력-차이-상세-분석-q1-6-심층](../study/study.md#2-temperature와-max-tokens-옵션-변경-시-출력-차이-상세-분석-q1-6-심층) |
+| **[Item 3-1](#q3-1)** | Temperature 파라미터 이해 | [src/ai_client.py#L118](../src/ai_client.py#L118) | [study/study.md#section-2](../study/study.md#section-2) |
 | **[Item 3-2](#q3-2)** | Max Tokens 파라미터 이해 | [src/ai_client.py#L119](../src/ai_client.py#L119) | [study/study.md#12-진짜-잘-설정되었는지-쿼리로-조사하는-3대-검증-방법](../study/study.md#12-진짜-잘-설정되었는지-쿼리로-조사하는-3대-검증-방법) |
 | **[Item 3-3](#q3-3)** | 프롬프트 컨텍스트 설계 | [src/prompt_builder.py](../src/prompt_builder.py#L17-L121) | [tests/test_assistant.py:TestPromptBuilder](../tests/test_assistant.py#L77-L94) |
 | **[Item 3-4](#q3-4)** | 후처리 vs 재생성 선택 이유 | [src/validator.py](../src/validator.py#L50-L137) | [study/study.md#35-왜-재생성retry-대신-후처리post-processing를-선택했는가](../study/study.md#35-왜-재생성retry-대신-후처리post-processing를-선택했는가) |
-| **[Item 4-1](#q4-1)** | AI 텍스트 검토 필요성 | [src/main.py#L124-L131](../src/main.py#L124-L131) | [README.md#4-안전-모드-safe-mode-및-보안-정책](../README.md#4-안전-모드-safe-mode-및-보안-정책) |
-| **[Item 4-2](#q4-2)** | Git diff 민감정보 마스킹 | [src/git_collector.py:_SENSITIVE](../src/git_collector.py#L27-L47) | [tests/test_assistant.py:test_safe_mode_masking](../tests/test_assistant.py#L29-L47) |
-| **[Item 4-3](#q4-3)** | 실무 개선 우선순위 | [src/git_collector.py#L135-L140](../src/git_collector.py#L135-L140), [src/main.py#L249-L264](../src/main.py#L249-L264) | [study/project_summary.md](../study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-mainpy) |
+| **[Item 4-1](#q4-1)** | AI 텍스트 검토 필요성 | [src/main.py#L124-L131](../src/main.py#L124-L131) | [README.md#53-생성-결과-검토-원칙](../README.md#53-생성-결과-검토-원칙) |
+| **[Item 4-2](#q4-2)** | Git diff 민감정보 마스킹 | [src/git_collector.py:_SENSITIVE](../src/git_collector.py#L27-L47) | [tests/test_assistant.py:test_safe_mode_masking](../tests/test_assistant.py#L29-L47) · [study/study.md#section-6](../study/study.md#section-6) |
+| **[Item 4-3](#q4-3)** | 실무 개선 우선순위 | [src/git_collector.py#L135-L140](../src/git_collector.py#L135-L140), [src/main.py#L249-L264](../src/main.py#L249-L264) | [study/study.md#section-4](../study/study.md#section-4) · [study/project_summary.md](../study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-terminal-rendering) |

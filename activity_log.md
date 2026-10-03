@@ -155,8 +155,16 @@
 - **2026-10-03 22:17 (KST)**:
   - User explicitly instructed: "앞으로 푸시는 하지마라 (Do not push in the future)".
   - Updated Rule 2 across `AGENTS.md` and `GEMINI.md`: established strict policy that `git push` will never be executed automatically; only local Git commits will be performed after test pass, and remote push will only be run upon explicit user request.
-  - Verified 100% synchronization between `AGENTS.md` and `GEMINI.md`.
-
-
-
-
+- **2026-10-03 22:35 (KST)**:
+  - Authored 4 comprehensive technical deep-dive sections in `study/study.md`:
+    - **제4장: Git 메타데이터 수집 및 Staged/Unstaged 분리 아키텍처 심층 분석 (Q4-3, Q2-1 연계)**: Git 3대 공간 모델(Index vs Working Tree), 단순 결합(`+`) 시 발생하는 3대 결함(할루시네이션, 동일 파일 diff 청크 중복, 상태 메타 유실), 상태 헤더 구획화 개선 코드 및 3-Way diff(`merge-base`) PR 추출 메커니즘.
+    - **제5장: 가상환경 자동 부트스트랩 및 무중단 프로세스 교체 메커니즘 (`os.execv`) (Q1-1, Q2-1 연계)**: `sys.prefix` vs `sys.executable` & macOS 심볼릭 링크 판별 원리, `subprocess.run` 대비 `os.execv`의 Zero-overhead 프로세스 치환(메모리 오버헤드 0, PID/TTY/종료코드 보존), 시퀀스 다이어그램.
+    - **제6장: 정규식 기반 9종 민감정보 마스킹 및 전송량 제어 보안 아키텍처 (Q4-2 연계)**: 9종 보안 마스킹 패턴(`_SENSITIVE`), ReDoS 방지 설계, 의미론적 토큰 치환, `diff --git` 단위 청크 분할 및 대량 변경 절삭 알고리즘(`MAX_SAFE_FILES = 10`, `MAX_SAFE_LINES = 200`), 전/후 비교표.
+    - **제7장: 서브커맨드 전/후 위치 자유도를 보장하는 CLI 옵션 파싱 아키텍처 (Q1-6, Q2-3 연계)**: 단일 대시(`-temperature`)와 이중 대시(`--temperature`) 복수 등록 기법, 서브파서 기본값 충돌 방지를 위한 `argparse.SUPPRESS` 기법.
+  - Linked all newly added sections in `docs/EVALUATION_QA.md`:
+    - Added `📖 **심층 기술 분석 문서**:` subsections to Q1-1, Q2-1, Q2-3, Q4-2, Q4-3.
+    - Updated Section 5 Traceability Matrix table with direct links to Sections 2, 3, 4, 5, 6, 7 in `study/study.md`.
+  - Fixed remaining broken anchors in `docs/EVALUATION_QA.md` and cleaned all backticks inside link brackets repo-wide.
+  - Verified 100% link resolution (31/31 anchors in `study.md`, 69/69 in `EVALUATION_QA.md`, 0 broken links).
+  - Verified 14/14 unit tests passing in 0.06s.
+  - Preserved source code 100% intact (`src/` untouched per user constraint).
