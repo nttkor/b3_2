@@ -1602,3 +1602,86 @@ s
   • 확인 방법: 브라우저에서 https://github.com/nttkor/b3_2/blob/main/docs/EVALUATION_QA.md 페이지를 **새로고침(Cmd + R 또는 F5)**하시면 이제 해당 위치가 선명한 파란색 밑줄 하이퍼링크로 정상 표시됩니다!
 
   완료 시각: `2026-10-03 21:54:20 (KST)``*
+
+  -------------
+
+   ### 작업 완료 보고서 (Final Completion Report)
+  • 완료 일시: 2026-10-03 22:34:43 KST
+  • 작업 대상 문서:
+      • study.md
+      • EVALUATION_QA.md
+      • chat.md
+      • activity_log.md
+  • 로컬 커밋 해시: 53301be (docs: 프로젝트 코드 심층 기술 설명 4개 장 추가 및 동료평가서 양방향 링크 연동)
+  • 원격 저장소 푸시 여부: 미수행 (원격 푸시 절대 금지 규칙 엄수)
+  ──────
+  ### 1. 주요 작업 내용 및 기술 수록 내역
+
+  사용자님의 지침에 따라 소스코드(src/ 및 main.py)는 100% 원본 그대로 보존하고, 프로젝트 코드 전반에 실제로 사용된 핵심 시스템 프로그래밍 및 아키텍처 기법을 study.md에 4개 장으로 신규 집대성한 뒤
+  EVALUATION_QA.md와 상호 유기적으로 링크를 연결했습니다.
+
+  #### [study/study.md 신규 수록 기술 (제4장 ~ 제7장)]
+  1. 제4장: Git 메타데이터 수집 및 Staged/Unstaged 분리 아키텍처 심층 분석 (Q4-3, Q2-1 연계)
+      • Git 3대 공간 모델과 커밋 본질: Working Tree vs Index(Staging Area) vs Repository(HEAD) 상태 분리 원리.
+      • 현재 구현의 한계점과 할루시네이션 메커니즘: git_collector.py:135-140의 단순 문자열 결합(+)으로 인해 발생하는 3대 결함(커밋 범위 불일치 및 미등록 디버깅 코드 요약 환각, 동일 파일 diff 청크 중복 출현
+      혼란, Git 상태 메타 유실).
+      • 아키텍처 개선안 및 코드 스니펫: === STAGED CHANGES ===와 === UNSTAGED CHANGES === 명시적 헤더 구획화 및 Staged 우선순위 프롬프트 정책 제안.
+      • 3-Way Diff(git merge-base) PR 추출 메커니즘: 기준 브랜치(main, master, 원격 브랜치)와의 공통 조상 SHA를 찾아 순수 브랜치 작업분만 추출하는 원리.
+  2. 제5장: 가상환경 자동 부트스트랩 및 무중단 프로세스 교체 메커니즘 (os.execv) (Q1-1, Q2-1 연계)
+      • 부트스트랩 필요성: 사용자가 source .venv/bin/activate를 잊었을 때 발생하는 ModuleNotFoundError의 근본적 예방.
+      • sys.prefix vs sys.executable 판별 원리: macOS Homebrew/pyenv 환경에서 .venv/bin/python이 심볼릭 링크로 연결되어 있을 때 sys.executable 비교가 오작동하는 원인과 Path(sys.prefix).resolve()를 통한 100%
+      신뢰성 있는 가상환경 판별 기법.
+      • subprocess.run 대비 os.execv의 기술적 우위:
+          • 메모리 오버헤드 0 (부모 프로세스 대기 불필요, 원자적 메모리 이미지 교체)
+          • 동일 PID 및 터미널 TTY 디스크립터 보존
+          • 가상환경 파이썬의 종료 코드(Exit Code) 및 시그널(Ctrl+C) 직격 전달
+      • Mermaid 시퀀스 다이어그램을 통한 프로세스 치환 라이프사이클 시각화.
+  3. 제6장: 정규식 기반 9종 민감정보 마스킹 및 전송량 제어 보안 아키텍처 (Q4-2 연계)
+      • 9종 보안 마스킹 패턴(_SENSITIVE): OpenAI, Anthropic, AWS Access Key, JWT, PEM 개인키, 패스워드 할당문, 이메일, 신용카드 번호 등 정규식 분석.
+      • ReDoS(정규식 DoS) 방지 및 안전성: 고정 프리픽스(sk-, AKIA) 조기 앵커링 및 비탐욕적([\s\S]+?) 패턴 설계.
+      • 의미론적 토큰(Semantic Token) 치환: 무조건 삭제가 아닌 [MASKED_API_KEY] 형태로 치환하여 AI가 코드의 맥락(Context)을 이해할 수 있도록 유도.
+      • 구조적 절삭(Structural Pruning): diff --git 단위 파일 수 제한(MAX_SAFE_FILES = 10) 및 라인 수 절삭(MAX_SAFE_LINES = 200)과 안내 플래그 주입.
+      • 안전 모드(-safe-mode) 활성화 전/후 페이로드 비교표.
+  4. 제7장: 서브커맨드 전/후 위치 자유도를 보장하는 CLI 옵션 파싱 아키텍처 (Q1-6, Q2-3 연계)
+      • 단일 대시(-temperature)와 이중 대시(--temperature) 동시 등록 기법: 사용자 입력 오타 및 레거시 CLI 습관 포용.
+      • argparse.SUPPRESS를 활용한 서브파서 기본값 충돌 방지: 서브커맨드 앞(python main.py -t 0.1 commit)과 뒤(python main.py commit -t 0.1) 어디에 옵션을 배치하더라도 기본값에 의해 사용자의 명시적 입력이
+      덮어씌워지지 않도록 설계한 인자 상속 아키텍처.
+
+  ──────
+  ### 2. 동료평가서(EVALUATION_QA.md) 양방향 링크 연동
+  EVALUATION_QA.md 내의 각 질문 및 5절 추적 매트릭스에 심층 기술 노트로 즉시 이동할 수 있는 바로가기 링크를 배치했습니다:
+
+   문항                                                               | 핵심 주제                                                          | study/study.md 연계 챕터
+  --------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------
+   Item 1-1[1]                                                        | 커밋 메시지 자동 생성 및 런타임 보장                               | study/study.md 제5장 (가상환경 자동 부트스트랩 `os.execv`)
+   Item 1-2[2]                                                        | PR 초안 자동 생성 및 브랜치 수집                                   | study/study.md 제4장 (3-Way Diff `merge-base` 알고리즘)
+   Item 1-6[3]                                                        | 하이퍼파라미터(-t, -max-tokens) 실동작                             | study/study.md 제2장 (Temperature/Max-tokens 실측 비교)
+   Item 1-7[4]                                                        | 길이/형식 하드 컷 및 불릿 강제                                     | study/study.md 제3장 (프롬프트 vs 사후 검증기 이중 안전장치)
+   Item 2-1[5]                                                        | Git 수집 / AI 호출 책임 분리                                       | study/study.md 제4장 (Git 수집기) & 제5장 (프로세스 부트스트랩)
+   Item 2-3[6]                                                        | CLI 옵션화 및 서브커맨드 배치 자유도                               | study/study.md 제7장 (CLI 파서 & `argparse.SUPPRESS` 아키텍처)
+   Item 4-2[7]                                                        | Git diff 민감정보 마스킹 및 전송량 제어                            | study/study.md 제6장 (9종 정규식 보안 마스킹 및 청크 절삭)
+   Item 4-3[8]                                                        | 실무 개선 1순위 (Staged/Unstaged 분리)                             | study/study.md 제4장 (Staged/Unstaged 분리 아키텍처 심층 분석)
+
+  [1]: Item 1-1 #q1-1
+  [2]: Item 1-2 #q1-2
+  [3]: Item 1-6 #q1-6
+  [4]: Item 1-7 #q1-7
+  [5]: Item 2-1 #q2-1
+  [6]: Item 2-3 #q2-3
+  [7]: Item 4-2 #q4-2
+  [8]: Item 4-3 #q4-3
+  ──────
+  ### 3. 무결성 및 검증 결과
+
+  • 마크다운 링크 앵커 검증:
+      • study.md: 31개 전체 앵커 100% 정상 연결 (Broken 0건)
+      • EVALUATION_QA.md: 69개 전체 앵커 100% 정상 연결 (Broken 0건)
+  • 링크 서식 검증:
+      • 리포지토리 전체 마크다운 파일 검사 결과: 대괄호 안쪽 백틱(`) 0건 달성 (모든 링크가 선명한 파란색 글씨와 밑줄로 표시)
+  • 단위 테스트 검증:
+    .venv/bin/python -m unittest tests/test_assistant.py
+
+      • 결과: Ran 14 tests in 0.075s — OK (14개 전 테스트 100% 통과)
+  • Git 상태:
+      • 로컬 커밋 완료 (53301be)
+      • git push는 실행하지 않았으며 로컬 브랜치에 안전하게 보존되어 있습니다.`**
