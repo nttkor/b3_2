@@ -29,6 +29,18 @@ _SENSITIVE: list[tuple[str, str]] = [
 
 
 class GitCollector:
+    """Git 명령어 실행을 통해 status, diff, 브랜치 정보를 수집하고 민감정보를 필터링하는 수집기."""
+
+    def is_git_repo(self) -> bool:
+        """현재 디렉토리가 Git 저장소 내부인지 확인한다.
+
+        Returns:
+            bool: Git 저장소 내부이면 True, 아니면 False
+        """
+        r = subprocess.run(['git', 'rev-parse', '--is-inside-work-tree'],
+                           capture_output=True, text=True)
+        return r.returncode == 0
+
     def _run(self, cmd: list[str]) -> str:
         r = subprocess.run(cmd, capture_output=True, text=True,
                            encoding='utf-8', errors='replace')
@@ -44,6 +56,7 @@ class GitCollector:
     def get_diff(self, safe_mode: bool = False, for_pr: bool = False,
                  safe_max_files: int = DEFAULT_MAX_FILES,
                  safe_max_lines: int = DEFAULT_MAX_LINES) -> str:
+        """현재 변경 사항의 diff를 수집한다. 변경 사항이 없으면 빈 문자열을 반환한다."""
         diff = ''
         if for_pr:
             diff = self._branch_diff()
@@ -51,8 +64,6 @@ class GitCollector:
             staged = self._run(['git', 'diff', '--cached'])
             unstaged = self._run(['git', 'diff'])
             diff = (staged + unstaged).strip()
-        if not diff:
-            diff = self._run(['git', 'diff', 'HEAD~1']).strip()
 
         if safe_mode:
             diff, stats = self._apply_safe(diff, safe_max_files, safe_max_lines)

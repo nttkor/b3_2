@@ -5,6 +5,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+load_dotenv(Path.cwd() / '.env')
 load_dotenv(Path(__file__).parent / '.env')
 
 import convention as conv
@@ -13,7 +14,7 @@ from git_collector import GitCollector
 from prompt_builder import build_commit_prompt, build_pr_prompt
 from validator import validate_commit, validate_pr
 
-DEFAULT_MODEL = 'anthropic/claude-opus-4'
+DEFAULT_MODEL = 'anthropic/claude-3.5-haiku'
 DEFAULT_TEMPERATURE = 0.3
 DEFAULT_MAX_TOKENS = 1024
 
@@ -28,6 +29,10 @@ def _make_client(args: argparse.Namespace) -> AIClient:
 
 def cmd_commit(args: argparse.Namespace, convention: dict) -> None:
     collector = GitCollector()
+
+    if not collector.is_git_repo():
+        print('[ERROR] Git 저장소가 아닙니다. Git이 초기화된 디렉토리에서 실행하세요.')
+        sys.exit(1)
 
     if not collector.count_changed_files():
         print('[INFO] 변경 사항이 없습니다. 커밋 메시지를 생성하지 않고 종료합니다.')
@@ -62,6 +67,10 @@ def cmd_commit(args: argparse.Namespace, convention: dict) -> None:
 
 def cmd_pr(args: argparse.Namespace, convention: dict) -> None:
     collector = GitCollector()
+
+    if not collector.is_git_repo():
+        print('[ERROR] Git 저장소가 아닙니다. Git이 초기화된 디렉토리에서 실행하세요.')
+        sys.exit(1)
 
     max_files = args.safe_max_files or convention.get('safe_max_files', 10)
     max_lines = args.safe_max_lines or convention.get('safe_max_lines', 200)
@@ -101,22 +110,22 @@ def build_parser() -> argparse.ArgumentParser:
         prog='main.py',
         description='AI 기반 Git 커밋/PR 자동 생성기 (OpenRouter)',
     )
-    parser.add_argument('--model', '-m', default=DEFAULT_MODEL,
+    parser.add_argument('--model', '-model', '-m', default=DEFAULT_MODEL,
                         help=f'AI 모델 ID (기본값: {DEFAULT_MODEL})')
-    parser.add_argument('--temperature', '-t', type=float, default=DEFAULT_TEMPERATURE,
+    parser.add_argument('--temperature', '-temperature', '-t', type=float, default=DEFAULT_TEMPERATURE,
                         help=f'생성 온도 0.0~1.0 (기본값: {DEFAULT_TEMPERATURE})')
-    parser.add_argument('--max-tokens', type=int, default=DEFAULT_MAX_TOKENS,
+    parser.add_argument('--max-tokens', '-max-tokens', type=int, default=DEFAULT_MAX_TOKENS,
                         dest='max_tokens',
                         help=f'최대 출력 토큰 수 (기본값: {DEFAULT_MAX_TOKENS})')
-    parser.add_argument('--safe-mode', '-s', action='store_true',
+    parser.add_argument('--safe-mode', '-safe-mode', '-s', action='store_true',
                         help='민감 정보 마스킹 + diff 크기 제한')
-    parser.add_argument('--safe-max-files', type=int, default=None,
+    parser.add_argument('--safe-max-files', '-safe-max-files', type=int, default=None,
                         dest='safe_max_files',
                         help='안전 모드 파일 수 제한 (기본값: 컨벤션 설정 또는 10)')
-    parser.add_argument('--safe-max-lines', type=int, default=None,
+    parser.add_argument('--safe-max-lines', '-safe-max-lines', type=int, default=None,
                         dest='safe_max_lines',
                         help='안전 모드 줄 수 제한 (기본값: 컨벤션 설정 또는 200)')
-    parser.add_argument('--convention', '-c', default=None, metavar='FILE',
+    parser.add_argument('--convention', '-convention', '-c', default=None, metavar='FILE',
                         help='컨벤션 설정 파일 경로 (기본값: .ai-gitgen.yml)')
 
     sub = parser.add_subparsers(dest='command', metavar='command')
