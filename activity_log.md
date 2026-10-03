@@ -122,15 +122,17 @@
   - Verified 14/14 unit tests passing.
 - **2026-10-03 20:50 (KST)**:
   - Added bidirectional traceability matrix links in `docs/EVALUATION_QA.md`:
-    - Inserted `> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item X-Y)](#5-전체-문항-추적-매트릭스-traceability-matrix)` under all 18 question headings.
+    - Inserted `> 📊 **동료평가 추적 매트릭스**: [전체 문항 추적 매트릭스 (Item X-Y)](#matrix)` under all 18 question headings.
     - Added explicit anchor tags `<a id="qX-Y"></a>` for guaranteed GitHub markdown rendering.
     - Linked table items (`[**Item X-Y**](#qX-Y)`) in Section 5 back to their corresponding question headings.
   - Verified 14/14 unit tests passing.
-- **2026-10-03 21:05 (KST)**:
-  - Fully populated and enriched code links across all 18 questions in `docs/EVALUATION_QA.md`:
-    - Added explicit `* **관련 소스코드**:` sections and code snippets with exact line links for Q2-1, Q2-2, Q2-3, Q2-4, Q3-1, Q3-2, Q3-3, Q3-4, Q4-1, Q4-2, Q4-3.
-    - Linked all unit test methods (`tests/test_assistant.py#L...`) and deep study notes across the document.
-    - Completed 100% clickable links in the Section 5 Traceability Matrix table (source code lines + test methods/deep links).
+- **2026-10-03 21:16 (KST)**:
+  - Fixed Markdown link styling across all documentation (`docs/EVALUATION_QA.md`, `study/study.md`, `study/project_summary.md`, `study/folder_index.md`, `docs/b6-2-mission.md`, `chat.md`):
+    - Removed backticks from inside link text (e.g. converted link text wrapped in code backticks to plain text), eliminating `<code>` styling inside `<a>` tags so all links display with standard **blue text and underline**.
+    - Moved bold tags outside link brackets in the Section 5 Traceability Matrix (`**[Item X-Y](#qX-Y)**`).
+    - Added explicit section anchors (`<a id="section-1"></a>` ~ `<a id="section-4"></a>`, `<a id="matrix"></a>`) and updated TOC links to eliminate broken anchor navigation caused by em-dashes and Korean punctuation.
+    - Cleaned false domain URLs in `docs/b6-2-mission.md` (converted false http links to valid `main.py` file links).
+  - Verified with automated scripts: 0 broken anchors, 0 broken file paths, 0 backticks inside link text across all 14 repository markdown files.
   - Verified 14/14 unit tests passing.
 
 

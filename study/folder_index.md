@@ -46,18 +46,18 @@ b3_2/
 
 | 파일 경로 | 상대 경로 링크 | 계층(Layer) | 주요 역할 및 핵심 책임 |
 | :--- | :--- | :---: | :--- |
-| **`main.py`** | [`../main.py`](../main.py) | **Entry** | • 루트 실행 엔트리포인트<br>• `sys.prefix` 기반 가상환경(`.venv`) 자동 감지 및 `os.execv` 재실행<br>• `src/` 디렉토리를 `sys.path`에 주입 후 `src.main.main()` 호출 |
-| **`src/main.py`** | [`../src/main.py`](../src/main.py) | **CLI / Controller** | • CLI 옵션 파서 구축 (`build_parser`): `--model`, `--temperature`, `--max-tokens`, `--safe-mode` 등<br>• 서브커맨드 앞/뒤 옵션 상속(`argparse.SUPPRESS`) 지원<br>• `cmd_commit`, `cmd_pr` 오케스트레이션 및 구획화된 최종 출력 |
-| **`src/git_collector.py`** | [`../src/git_collector.py`](../src/git_collector.py) | **Infrastructure** | • `GitCollector` 클래스 구현<br>• `subprocess.run` 기반 `is_git_repo`, `get_status`, `get_diff`, `get_current_branch` 실행<br>• Staged/Unstaged 통합 diff 수집 및 변경 부재 시 조기 정상 종료(`sys.exit(0)`)<br>• 안전 모드(`-safe-mode`): 정규식 9종 민감정보 마스킹 및 diff 줄/파일 수 절삭 |
-| **`src/ai_client.py`** | [`../src/ai_client.py`](../src/ai_client.py) | **AI Client** | • `AIClient` 클래스 구현<br>• `AI_API_KEY` 환경변수 우선 탐색 및 `sk-cody-` 키 감지 시 Codyssey Gateway 자동 라우팅<br>• 1회 정밀 호출(`generate`) 및 모델/호출 횟수 로깅<br>• 인증 실패/누락 시 스택 트레이스 없는 표준 가이드 출력 후 종료 |
-| **`src/prompt_builder.py`** | [`../src/prompt_builder.py`](../src/prompt_builder.py) | **Domain / Prompt** | • `build_commit_prompt`: Conventional Commits 규격, 제목 1줄, 본문 불릿 및 변경 파일 포함 프롬프트 생성<br>• `build_pr_prompt`: 브랜치 맥락 주입 및 `## Why`, `## What`, `## How to Test` 템플릿 프롬프트 생성<br>• 네거티브 프롬프트를 통한 마크다운 코드 블록 및 잡담 배제 |
-| **`src/validator.py`** | [`../src/validator.py`](../src/validator.py) | **Domain / Validator** | • 소프트웨어 차원의 결정론적 사후 검증 및 후처리(Post-processing)<br>• 커밋 제목 72자, PR 제목 80자 초과 시 하드 컷 절삭(`[WARN]` 출력)<br>• PR 3대 필수 섹션 누락 감지 및 기본 템플릿 자동 보충(Fallback)<br>• 섹션별 최소 1개 이상의 `- ` 불릿 자동 보충 |
-| **`src/convention.py`** | [`../src/convention.py`](../src/convention.py) | **Configuration** | • `.ai-gitgen.yml` 설정 파일 로드 및 기본 컨벤션 딕셔너리 제공 |
-| **`tests/test_assistant.py`** | [`../tests/test_assistant.py`](../tests/test_assistant.py) | **Testing** | • 전체 14개 자동화 단위 테스트 스위트 (unittest)<br>• `GitCollector`, `AIClient`, `PromptBuilder`, `Validator`, `CLIParser` 회귀 테스트 |
-| **`docs/b6-2-mission.md`** | [`../docs/b6-2-mission.md`](../docs/b6-2-mission.md) | **Documentation** | • B3-2 미션 원본 명세 및 5대 과제 목표 / 6대 기능 요구사항 공식 해설서 |
-| **`docs/EVALUATION_PLAN.md`**| [`../docs/EVALUATION_PLAN.md`](../docs/EVALUATION_PLAN.md) | **Documentation** | • 동료 평가 6단계(문항-요구사항-구현-검증-증빙-설명) 완벽 대비 계획서 |
-| **`docs/CONVENTIONS.md`** | [`../docs/CONVENTIONS.md`](../docs/CONVENTIONS.md) | **Documentation** | • 4단락(Why, What, Impact, Verification) 커밋 메시지 작성 표준 |
-| **`activity_log.md`** | [`../activity_log.md`](../activity_log.md) | **Memory / Log** | • 안티그래비티 작업 메모리 및 단계별 의사결정 히스토리 (규칙 7 준수) |
+| **`main.py`** | [../main.py](../main.py) | **Entry** | • 루트 실행 엔트리포인트<br>• `sys.prefix` 기반 가상환경(`.venv`) 자동 감지 및 `os.execv` 재실행<br>• `src/` 디렉토리를 `sys.path`에 주입 후 `src.main.main()` 호출 |
+| **`src/main.py`** | [../src/main.py](../src/main.py) | **CLI / Controller** | • CLI 옵션 파서 구축 (`build_parser`): `--model`, `--temperature`, `--max-tokens`, `--safe-mode` 등<br>• 서브커맨드 앞/뒤 옵션 상속(`argparse.SUPPRESS`) 지원<br>• `cmd_commit`, `cmd_pr` 오케스트레이션 및 구획화된 최종 출력 |
+| **`src/git_collector.py`** | [../src/git_collector.py](../src/git_collector.py) | **Infrastructure** | • `GitCollector` 클래스 구현<br>• `subprocess.run` 기반 `is_git_repo`, `get_status`, `get_diff`, `get_current_branch` 실행<br>• Staged/Unstaged 통합 diff 수집 및 변경 부재 시 조기 정상 종료(`sys.exit(0)`)<br>• 안전 모드(`-safe-mode`): 정규식 9종 민감정보 마스킹 및 diff 줄/파일 수 절삭 |
+| **`src/ai_client.py`** | [../src/ai_client.py](../src/ai_client.py) | **AI Client** | • `AIClient` 클래스 구현<br>• `AI_API_KEY` 환경변수 우선 탐색 및 `sk-cody-` 키 감지 시 Codyssey Gateway 자동 라우팅<br>• 1회 정밀 호출(`generate`) 및 모델/호출 횟수 로깅<br>• 인증 실패/누락 시 스택 트레이스 없는 표준 가이드 출력 후 종료 |
+| **`src/prompt_builder.py`** | [../src/prompt_builder.py](../src/prompt_builder.py) | **Domain / Prompt** | • `build_commit_prompt`: Conventional Commits 규격, 제목 1줄, 본문 불릿 및 변경 파일 포함 프롬프트 생성<br>• `build_pr_prompt`: 브랜치 맥락 주입 및 `## Why`, `## What`, `## How to Test` 템플릿 프롬프트 생성<br>• 네거티브 프롬프트를 통한 마크다운 코드 블록 및 잡담 배제 |
+| **`src/validator.py`** | [../src/validator.py](../src/validator.py) | **Domain / Validator** | • 소프트웨어 차원의 결정론적 사후 검증 및 후처리(Post-processing)<br>• 커밋 제목 72자, PR 제목 80자 초과 시 하드 컷 절삭(`[WARN]` 출력)<br>• PR 3대 필수 섹션 누락 감지 및 기본 템플릿 자동 보충(Fallback)<br>• 섹션별 최소 1개 이상의 `- ` 불릿 자동 보충 |
+| **`src/convention.py`** | [../src/convention.py](../src/convention.py) | **Configuration** | • `.ai-gitgen.yml` 설정 파일 로드 및 기본 컨벤션 딕셔너리 제공 |
+| **`tests/test_assistant.py`** | [../tests/test_assistant.py](../tests/test_assistant.py) | **Testing** | • 전체 14개 자동화 단위 테스트 스위트 (unittest)<br>• `GitCollector`, `AIClient`, `PromptBuilder`, `Validator`, `CLIParser` 회귀 테스트 |
+| **`docs/b6-2-mission.md`** | [../docs/b6-2-mission.md](../docs/b6-2-mission.md) | **Documentation** | • B3-2 미션 원본 명세 및 5대 과제 목표 / 6대 기능 요구사항 공식 해설서 |
+| **`docs/EVALUATION_PLAN.md`**| [../docs/EVALUATION_PLAN.md](../docs/EVALUATION_PLAN.md) | **Documentation** | • 동료 평가 6단계(문항-요구사항-구현-검증-증빙-설명) 완벽 대비 계획서 |
+| **`docs/CONVENTIONS.md`** | [../docs/CONVENTIONS.md](../docs/CONVENTIONS.md) | **Documentation** | • 4단락(Why, What, Impact, Verification) 커밋 메시지 작성 표준 |
+| **`activity_log.md`** | [../activity_log.md](../activity_log.md) | **Memory / Log** | • 안티그래비티 작업 메모리 및 단계별 의사결정 히스토리 (규칙 7 준수) |
 
 ---
 
@@ -341,7 +341,7 @@ flowchart LR
 
 3. **결정론적 사후 검증 파이프라인 (Deterministic Post-Validation)**
    - **배경**: LLM은 확률적 생성을 하므로 글자 수 초과, 필수 섹션 누락, 불릿 누락 등의 편차가 발생할 수 있음.
-   - **결정**: API를 재호출하지 않고 [`src/validator.py`](../src/validator.py)를 통해 문자열 하드 컷, 섹션 폴백, 불릿 강제 삽입을 소프트웨어 차원에서 100% 보장.
+   - **결정**: API를 재호출하지 않고 [src/validator.py](../src/validator.py)를 통해 문자열 하드 컷, 섹션 폴백, 불릿 강제 삽입을 소프트웨어 차원에서 100% 보장.
 
 4. **Clean Git 상태 조기 판별 (Clean Repo Early Exit)**
    - **배경**: 변경 사항이 없는 상태에서 AI API를 호출하거나 이전 커밋(`HEAD~1`)을 읽어 잘못된 커밋/PR을 생성하는 버그 차단.
@@ -351,8 +351,8 @@ flowchart LR
 
 ## 7. 관련 문서 및 소스 링크
 
-- **루트 사용 안내서**: [`README.md`](../README.md)
-- **동료 평가 계획서**: [`docs/EVALUATION_PLAN.md`](../docs/EVALUATION_PLAN.md)
-- **미션 요구사항 해설서**: [`docs/b6-2-mission.md`](../docs/b6-2-mission.md)
-- **커밋 메시지 컨벤션**: [`docs/CONVENTIONS.md`](../docs/CONVENTIONS.md)
-- **단위 테스트 스위트**: [`tests/test_assistant.py`](../tests/test_assistant.py)
+- **루트 사용 안내서**: [README.md](../README.md)
+- **동료 평가 계획서**: [docs/EVALUATION_PLAN.md](../docs/EVALUATION_PLAN.md)
+- **미션 요구사항 해설서**: [docs/b6-2-mission.md](../docs/b6-2-mission.md)
+- **커밋 메시지 컨벤션**: [docs/CONVENTIONS.md](../docs/CONVENTIONS.md)
+- **단위 테스트 스위트**: [tests/test_assistant.py](../tests/test_assistant.py)

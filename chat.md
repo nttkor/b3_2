@@ -1246,3 +1246,140 @@ b6-2-mission.md:46-157의 ## 3. 과제 목표 에 명시된 5가지 핵심 학�
   • main.py:164-176: 최상위 엔트리포인트 및 컨벤션 주입 흐름
 
   보고 시각: 2026-10-03 19:31:21 (KST)
+
+------------
+> /Users/mpeg46551/b3_2/docs/EVALUATION_QA.md 설명의 코드 링크가 안된데가 많다 구현한 코드 전체다 링크해
+
+● Read(~/b3_2/docs/EVALUATION_QA.md)
+● Read(~/b3_2/docs/EVALUATION_QA.md)
+● Read(~/b3_2/docs/EVALUATION_QA.md) (ctrl+o to expand)
+
+▸ Thought for 7s, 1.1k tokens
+  All questions in sections 2, 3, and 4 need review to confirm the presence and correctness of code links. The traceability matrix in section 5 requires verifying the existence of corresponding code snippets...
+
+● Read(~/b3_2/tests/test_assistant.py) (ctrl+o to expand)
+▸ Thought for 5s, 1.1k tokens
+  Reviewing the test file, several tests cover critical aspects of the assistant's functionality. There are tests for Git repository detection, safe mode behavior (masking and truncation), and API key handli...
+
+● Read(~/b3_2/src/git_collector.py) (ctrl+o to expand)
+
+▸ Thought for 52s, 7.3k tokens
+  The commit message generation flow is initiated by `main.py`'s `cmd_commit`. It uses `GitCollector` to obtain the diff, then constructs a prompt with `build_commit_prompt`. The AI client then generates a r...
+
+● Edit(~/.gemini/antigravity-cli/brain/0d90e6a2-3277-48a3-8478-8a06394b1b30/scratch/generate_qa.py)
+● Bash(.venv/bin/python /Users/mpeg46551/.gemini/antigravity-cli/brain/0d90e6a2-3277-48a3-8478-8a06394b1b30/scratch/generate_qa.py)
+● Bash(.venv/bin/python -c ")
+● Bash(.venv/bin/python -m unittest tests/test_assistant.py)
+● Read(~/b3_2/activity_log.md)
+● Edit(~/b3_2/activity_log.md)
+● Bash(git status)
+● Bash(git add docs/EVALUATION_QA.md activity_log.md)
+● Bash(git commit -m "docs: EVALUATION_QA.md 전체 18개 문항 및 추적 매트릭스에 구현 소스코드/테스트 링크 전수 연결)
+● Bash(git push origin main)
+● Bash(TZ="Asia/Seoul" date +"%Y-%m-%d %H:%M:%S %Z") (ctrl+o to expand)
+
+  요청하신 대로 EVALUATION_QA.md 전반에 걸쳐 소스코드 링크가 누락되었던 부분(항목 2, 항목 3, 항목 4 및 5장 매트릭스)을 구현된 실제 파이썬 소스코드 라인 번호와 단위 테스트 라인 번호까지 100% 전수 연결
+  완료했습니다.
+  ──────
+  ### 1. 주요 보강 및 링크 연결 내역
+  #### ① 18개 전 문항에 '관련 소스코드' 및 '단위 테스트' 링크 전수 추가
+  기존에 소스코드 스니펫이나 구체적인 라인 링크가 없었던 항목들까지 빠짐없이 보강했습니다:
+   문항                                      | 핵심 주제                                 | 연결된 구현 소스코드 링크                                       | 연결된 단위 테스트 / 검증 링크
+  -------------------------------------------|-------------------------------------------|-----------------------------------------------------------------|----------------------------------------------------
+   Q1-1                                      | 커밋 메시지 출력                          | src/main.py#L42-L78[1], src/git_collector.py#L56-L77[2]         | tests/test_assistant.py#L25-L27[3]
+   Q1-2                                      | PR 제목/본문 출력                         | src/main.py#L80-L118[4], src/prompt_builder.py#L33-L61[5]       | tests/test_assistant.py#L87-L94[6]
+   Q1-3                                      | API Key 부재 방어                         | src/ai_client.py#L25-L34[7]                                     | tests/test_assistant.py#L62-L68[8]
+   Q1-4                                      | 변경 부재 조기 종료                       | src/main.py#L49-L51[9], src/git_collector.py#L52-L54[10]        | tests/test_assistant.py#L25-L27[3]
+   Q1-5                                      | PR 섹션/불릿 강제                         | src/prompt_builder.py#L43-L52[11], src/validator.py#L61-L89[12] | tests/test_assistant.py#L119-L136[13]
+   Q1-6                                      | CLI 옵션 파싱 동작                        | src/main.py#L120-L148[14], src/ai_client.py#L47-L57[15]         | tests/test_assistant.py#L144-L165[16]
+   Q1-7                                      | 제목 길이 하드 컷                         | src/validator.py#L22-L28[17], src/validator.py#L57-L89[18]      | tests/test_assistant.py#L99-L118[19]
+   Q2-1                                      | Git수집/AI호출 분리                       | src/git_collector.py#L56-L77[2], src/ai_client.py#L50-L58[20]   | tests/test_assistant.py#L19-L57[21], #L59-L75[22]
+   Q2-2                                      | 프롬프트/검증기 분리                      | src/prompt_builder.py#L1-L30[23], src/validator.py#L9-L30[24]   | tests/test_assistant.py#L77-L94[25], #L96-L136[26]
+   Q2-3 | CLI 옵션화 이유      | src/main.py#L121-L146[27], src/main.py#L34-L39[28]              | tests/test_assistant.py#L138-L165[29]
+   Q2-4                       | 오류 처리 및 복구          | src/ai_client.py#L59-L74[30], main.py#L7-L11[31]                | tests/test_assistant.py#L62-L68[8]
+   Q3-1                       | Temperature 원리           | src/ai_client.py#L52-L57[32], src/main.py#L130-L131[33]         | rature-실동작-검증-결정론-vs-무작위성-실측](../study/study.md#방법-3-
+        |                      |                                                                 | temperature-실동작-검증-결정성-실측study/study.md#방법-3-temperature-실동작-검증-결정론-vs-무작위성-
+                              |                            |                                                                 | 실측[34]
+   Q3-2                       | Max Tokens 원리            | src/main.py#L31[35], src/ai_client.py#L52-L57[32]               | study/study.md#방법-2-max_tokens-실동작-검증-finish_reason--length[36]
+   Q3-3**                     |                            |                                                                 |
+   [1]: src/main.py#L42-L78 ../src/main.py#L42-L78
+   [1]: src/main.py#L42-L78 ../src/main.py#L42-L78
+   [2]: src/git_collector.py#L56-L77 ../src/git_collector.py#L56-L77
+   [3]: tests/test_assistant.py#L25-L27 ../tests/test_assistant.py#L25-L27
+   [3]: tests/test_assistant.py#L25-L27 ../tests/test_assistant.py#L25-L27
+   [4]: src/main.py#L80-L118 ../src/main.py#L80-L118
+   [5]: src/prompt_builder.py#L33-L61 ../src/prompt_builder.py#L33-L61
+   [6]: tests/test_assistant.py#L87-L94 ../tests/test_assistant.py#L87-L94
+   [7]: src/ai_client.py#L25-L34 ../src/ai_client.py#L25-L34
+   [7]: src/ai_client.py#L25-L34 ../src/ai_client.py#L25-L34
+   [8]: tests/test_assistant.py#L62-L68 ../tests/test_assistant.py#L62-L68
+   [9]: src/main.py#L49-L51 ../src/main.py#L49-L51
+  [10]: src/git_collector.py#L52-L54 ../src/git_collector.py#L52-L54
+  [11]: src/prompt_builder.py#L43-L52 ../src/prompt_builder.py#L43-L52
+  [11]: src/prompt_builder.py#L43-L52 ../src/prompt_builder.py#L43-L52
+  [12]: src/validator.py#L61-L89 ../src/validator.py#L61-L89
+  [13]: tests/test_assistant.py#L119-L136 ../tests/test_assistant.py#L119-L136
+  [14]: src/main.py#L120-L148 ../src/main.py#L120-L148
+  [15]: src/ai_client.py#L47-L57 ../src/ai_client.py#L47-L57
+  [16]: tests/test_assistant.py#L144-L165 ../tests/test_assistant.py#L144-L165
+  [17]: src/validator.py#L22-L28 ../src/validator.py#L22-L28
+  [18]: src/validator.py#L57-L89 ../src/validator.py#L57-L89
+  [19]: tests/test_assistant.py#L99-L118 ../tests/test_assistant.py#L99-L118
+  [20]: src/ai_client.py#L50-L58 ../src/ai_client.py#L50-L58
+  [21]: tests/test_assistant.py#L19-L57 ../tests/test_assistant.py#L19-L57
+  [22]: #L59-L75 ../tests/test_assistant.py#L59-L75
+  [23]: src/prompt_builder.py#L1-L30 ../src/prompt_builder.py#L1-L30
+  [24]: src/validator.py#L9-L30 ../src/validator.py#L9-L30
+  [25]: tests/test_assistant.py#L77-L94 ../tests/test_assistant.py#L77-L94
+  [26]: #L96-L136 ../tests/test_assistant.py#L96-L136
+  [27]: src/main.py#L121-L146 ../src/main.py#L121-L146
+  [28]: src/main.py#L34-L39 ../src/main.py#L34-L39
+  [29]: tests/test_assistant.py#L138-L165 ../tests/test_assistant.py#L138-L165
+  [30]: src/ai_client.py#L59-L74 ../src/ai_client.py#L59-L74
+  [31]: main.py#L7-L11 ../main.py#L7-L11
+  [32]: src/ai_client.py#L52-L57 ../src/ai_client.py#L52-L57
+  [33]: src/main.py#L130-L131 ../src/main.py#L130-L131
+  [34]: study/study.md#방법-3-temperature-실동작-검증-결정론-vs-무작위성-실측 성-실측../study/study.md#방법-3-temperature-실동작-검증-결정론-vs-무작위성-실측
+  [35]: src/main.py#L31 ../src/main.py#L31                                    성-실측../study/study.md#방법-3-temperature-실동작-검증-결정론-vs-무작위성-실측
+  [35]: src/main.py#L31 ../src/main.py#L31
+  [36]: study/study.md#방법-2-max_tokens-실동작-검증-finish_reason--length ../study/study.md#방법-2-max_tokens-실동작-검증-finish_reason--length
+  [37]: src/prompt_builder.py#L9-L30 ../src/prompt_builder.py#L9-L30
+  [38]: #L39-L61 ../src/prompt_builder.py#L39-L61
+  [39]: tests/test_assistant.py#L80-L94 ../tests/test_assistant.py#L80-L94
+  [40]: src/main.py#L68-L71 ../src/main.py#L68-L71
+  [41]: study/study.md#35-왜-재생성retry-대신-후처리post-processing를-선택했는가 -재생성retry-대신-후처리post-processing를-선택했는가../study/study.md#35-왜-재생성retry-대신-후처리post-processing를-
+  선택했는가
+  [42]: src/main.py#L73-L76 ../src/main.py#L73-L76
+  [43]: src/main.py#L111-L116 ../src/main.py#L111-L116
+  [44]: README.md#4-안전-모드-safe-mode-및-보안-정책 -safe-mode-및-보안-정책../README.md#4-안전-모드-safe-mode-및-보안-정책
+  [45]: src/git_collector.py#L8-L28 ../src/git_collector.py#L8-L28
+  [46]: #L94-L124 ../src/git_collector.py#L94-L124
+  [47]: tests/test_assistant.py#L29-L47 ../tests/test_assistant.py#L29-L47
+  [48]: #L48-L57 ../tests/test_assistant.py#L48-L57
+  [49]: src/main.py#L148-L161 ../src/main.py#L148-L161
+  [50]: src/git_collector.py#L44-L48 ../src/git_collector.py#L44-L48
+  [51]: study/project_summary.md -터미널-출력-및-메타-피드백-mainpy../study/project_summary.md#step-8-구획화된-터미널-출력-및-메타-피드백-mainpy
+  ──────
+  #### ② ## 5. 전체 문항 추적 매트릭스 표의 100% 클릭 링크화
+
+  일반 텍스트로 남아 있던 단위 테스트명과 검증 항목을 모두 실제 테스트 메서드 라인 링크 및 심층 연구 문서 링크로 전수 전환했습니다:
+
+    | 평가 문항 | 핵심 검증 대상 | 구현 소스코드 링크 | 단위 테스트 및 검증 증빙 링크 |
+    | :--- | :--- | :--- | :--- |
+    | **[Item 1-1](docs/EVALUATION_QA.md#q1-1)** | 커밋 메시지 자동 생성 | [src/main.py:cmd_commit](src/main.py#L42-L78) | [tests/test_assistant.py:test_is_git_repo](tests/test_assistant.py#L25-L27) |
+    | **[Item 1-2](docs/EVALUATION_QA.md#q1-2)** | PR 초안 자동 생성 | [src/main.py:cmd_pr](src/main.py#L80-L118) | [tests/test_assistant.py:test_pr_prompt_contains_required_sections](tests/test_assistant.py#L87-L94) |
+    | **[Item 1-3](docs/EVALUATION_QA.md#q1-3)** | API Key 누락 예외 처리 | [src/ai_client.py:AIClient.__init__](src/ai_client.py#L23-L34) | [tests/test_assistant.py:test_missing_api_key_exits](tests/test_assistant.py#L62-L68) |
+    ... (Item 1-1부터 4-3까지 18개 문항 100% 클릭 가능)
+  ──────
+  ### 2. 저장소 동기화 상태
+
+  • 수정 파일:
+      • EVALUATION_QA.md (전 문항 소스코드 스니펫, 라인 링크, 단위 테스트 링크 전수 연결)
+      • activity_log.md (작업 이력 기록 갱신)
+  • Git 커밋 및 원격 반영:
+      • Commit ID: 2311ac1 (origin/main 푸시 완료)
+      • 커밋 메시지: docs: EVALUATION_QA.md 전체 18개 문항 및 추적 매트릭스에 구현 소스코드/테스트 링크 전수 연결
+  • 단위 테스트: 14개 테스트 전원 통과 (0.061s)
+  • 작업 트리: 완전히 깨끗한 클린 상태
+
+  보고  각 : 2026-10-03 21:05:53 (KST)

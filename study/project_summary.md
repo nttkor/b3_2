@@ -32,7 +32,7 @@ flowchart TD
 
 ### [Step 1] 프로세스 부트스트랩 & 가상환경 자동 전환 (Bootstrap & Auto-venv)
 
-* **실행 파일**: [`../main.py`](../main.py)
+* **실행 파일**: [../main.py](../main.py)
 * **목적**: 사용자가 `source .venv/bin/activate`를 깜빡했거나, macOS 전역 셸 별칭(`alias python=...`)이 걸려 있어도 `ModuleNotFoundError` 없이 100% 가상환경에서 동작하도록 보장.
 
 #### 1) 개요
@@ -55,7 +55,7 @@ flowchart TD
 
 ### [Step 2] CLI 인자 파싱 및 설정 주입 (CLI Parsing & Config)
 
-* **실행 파일**: [`../src/main.py`](../src/main.py), [`../src/convention.py`](../src/convention.py)
+* **실행 파일**: [../src/main.py](../src/main.py), [../src/convention.py](../src/convention.py)
 * **목적**: 사용자가 입력한 명령어 및 옵션을 해석하고, 환경변수(`.env`)와 팀 컨벤션(`.ai-gitgen.yml`)을 메모리에 적재.
 
 #### 1) 개요
@@ -75,7 +75,7 @@ flowchart TD
 
 ### [Step 3] Git 저장소 검증 및 작업 상태 수집 (Git Inspection)
 
-* **실행 파일**: [`../src/git_collector.py`](../src/git_collector.py) (`GitCollector`)
+* **실행 파일**: [../src/git_collector.py](../src/git_collector.py) (`GitCollector`)
 * **목적**: 현재 디렉토리가 Git 저장소인지 확인하고, 최신 코드 변경 상태(`git status`, `git diff`)를 수집.
 
 #### 1) 개요
@@ -99,7 +99,7 @@ Git CLI 명령어를 서브프로세스로 직접 호출하여 Staged(인덱스)
 
 ### [Step 4] 보안 필터링 및 데이터 축소 (Safe-Mode Sanitization)
 
-* **실행 파일**: [`../src/git_collector.py`](../src/git_collector.py) (`_mask_sensitive`)
+* **실행 파일**: [../src/git_collector.py](../src/git_collector.py) (`_mask_sensitive`)
 * **목적**: diff 코드 내에 실수로 포함된 API 키, 패스워드, 개인정보 등 민감정보 유출을 원천 방지하고 토큰 비용 절감.
 
 #### 1) 개요
@@ -124,7 +124,7 @@ Git CLI 명령어를 서브프로세스로 직접 호출하여 Staged(인덱스)
 
 ### [Step 5] 프롬프트 엔지니어링 및 컨텍스트 조립 (Prompt Building)
 
-* **실행 파일**: [`../src/prompt_builder.py`](../src/prompt_builder.py)
+* **실행 파일**: [../src/prompt_builder.py](../src/prompt_builder.py)
 * **목적**: 수집된 코드 변경 사항과 지시사항을 AI 모델이 가장 잘 이해할 수 있는 정형화된 프롬프트로 변환.
 
 #### 1) 개요
@@ -145,7 +145,7 @@ Git CLI 명령어를 서브프로세스로 직접 호출하여 Staged(인덱스)
 
 ### [Step 6] AI API 게이트웨이 연동 및 1회 정밀 호출 (AI Gateway Invocation)
 
-* **실행 파일**: [`../src/ai_client.py`](../src/ai_client.py) (`AIClient`)
+* **실행 파일**: [../src/ai_client.py](../src/ai_client.py) (`AIClient`)
 * **목적**: OpenAI 호환 REST API 게이트웨이로 프롬프트를 전송하고 응답 수신.
 
 #### 1) 개요
@@ -171,7 +171,7 @@ Git CLI 명령어를 서브프로세스로 직접 호출하여 Staged(인덱스)
 
 ### [Step 7] 결정론적 사후 검증 및 텍스트 다듬기 (Post-Validation)
 
-* **실행 파일**: [`../src/validator.py`](../src/validator.py)
+* **실행 파일**: [../src/validator.py](../src/validator.py)
 * **목적**: LLM의 확률적 오작동(글자 수 초과, 섹션 누락, 불릿 누락)을 소프트웨어 차원에서 100% 보정.
 
 #### 1) 개요
@@ -194,7 +194,7 @@ API를 다시 호출(재생성)하면 비용과 시간이 2배로 들기 때문�
 
 ### [Step 8] 구획화된 터미널 출력 및 메타 피드백 (Terminal Rendering)
 
-* **실행 파일**: [`../src/main.py`](../src/main.py) (`cmd_commit`, `cmd_pr`)
+* **실행 파일**: [../src/main.py](../src/main.py) (`cmd_commit`, `cmd_pr`)
 * **목적**: 검증이 완료된 최종 결과물을 사용자가 즉시 복사하여 쓸 수 있도록 깔끔하게 구획화하여 표시.
 
 #### 1) 개요

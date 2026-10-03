@@ -168,7 +168,7 @@ AI API는 외부 AI 모델의 텍스트 생성 기능을 애플리케이션에�
 
 > **구현 및 답변:**
 >
-> - **구현 위치**: [`src/git_collector.py`](../src/git_collector.py) (`GitCollector` 클래스), [`main.py`](../main.py)
+> - **구현 위치**: [src/git_collector.py](../src/git_collector.py) (`GitCollector` 클래스), [main.py](../main.py)
 > - **구체적 구현 내용**:
 >   1. **저장소 유효성 검사 (`is_git_repo`)**: `git rev-parse --is-inside-work-tree` 명령을 실행하여 현재 위치가 유효한 Git 저장소인지 사전 판별합니다. Git 저장소가 아닐 경우 `[ERROR] Git 저장소가 아닙니다. Git이 초기화된 디렉토리에서 실행하세요.`를 출력하고 `sys.exit(1)`로 즉시 종료합니다.
 >   2. **상태 수집 (`get_status`)**: `git status --porcelain`을 실행하여 변경된 파일 목록과 Staged/Unstaged 상태를 기계 판독 가능한 포맷으로 파싱합니다.
@@ -192,9 +192,9 @@ AI API는 외부 AI 모델의 텍스트 생성 기능을 애플리케이션에�
 
 > **구현 및 답변:**
 >
-> - **구현 위치**: [`src/ai_client.py`](../src/ai_client.py) (`AIClient` 클래스), [`src/main.py`](../src/main.py) (`build_parser` 및 서브커맨드)
+> - **구현 위치**: [src/ai_client.py](../src/ai_client.py) (`AIClient` 클래스), [src/main.py](../src/main.py) (`build_parser` 및 서브커맨드)
 > - **구체적 구현 내용**:
->   1. **API Key 보안 관리**: 소스 코드에 키를 일절 하드코딩하지 않으며, [`.env`](../.env) 파일 및 시스템 환경변수에서 로드합니다. 키 우선순위는 `AI_API_KEY` (Codyssey 가이드 및 미션 사양 최우선) → `OPENROUTER_API_KEY` → `OPENAI_API_KEY` 순으로 탐색합니다.
+>   1. **API Key 보안 관리**: 소스 코드에 키를 일절 하드코딩하지 않으며, [.env](../.env) 파일 및 시스템 환경변수에서 로드합니다. 키 우선순위는 `AI_API_KEY` (Codyssey 가이드 및 미션 사양 최우선) → `OPENROUTER_API_KEY` → `OPENAI_API_KEY` 순으로 탐색합니다.
 >   2. **자동 엔드포인트 라우팅**: 키가 `sk-cody-`로 시작할 경우 기본 엔드포인트를 자동으로 Codyssey OpenAI Gateway(`https://copa.codyssey.kr/v1`)로 연결합니다.
 >   3. **표준 에러 메시지 대응**: API Key가 누락되었거나 인증이 실패할 경우, 파이썬 트레이스백을 노출하지 않고 명세서 권장 양식과 100% 일치하는 에러 문구를 출력합니다:
 >      ```text
@@ -227,7 +227,7 @@ AI API는 외부 AI 모델의 텍스트 생성 기능을 애플리케이션에�
 
 > **구현 및 답변:**
 >
-> - **구현 위치**: [`src/prompt_builder.py`](../src/prompt_builder.py) (`build_commit_prompt`), [`src/validator.py`](../src/validator.py) (`validate_commit`), [`src/main.py`](../src/main.py) (`cmd_commit`)
+> - **구현 위치**: [src/prompt_builder.py](../src/prompt_builder.py) (`build_commit_prompt`), [src/validator.py](../src/validator.py) (`validate_commit`), [src/main.py](../src/main.py) (`cmd_commit`)
 > - **구체적 구현 내용**:
 >   1. **명령어 제공**: `python main.py commit`으로 실행됩니다.
 >   2. **Conventional Commits 규격 준수**: 프롬프트에 `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:` 접두사를 명시하여 타입 기반의 표준 커밋 메시지를 생성합니다.
@@ -266,7 +266,7 @@ AI API는 외부 AI 모델의 텍스트 생성 기능을 애플리케이션에�
 
 > **구현 및 답변:**
 >
-> - **구현 위치**: [`src/prompt_builder.py`](../src/prompt_builder.py) (`build_pr_prompt`), [`src/validator.py`](../src/validator.py) (`validate_pr`), [`src/main.py`](../src/main.py) (`cmd_pr`)
+> - **구현 위치**: [src/prompt_builder.py](../src/prompt_builder.py) (`build_pr_prompt`), [src/validator.py](../src/validator.py) (`validate_pr`), [src/main.py](../src/main.py) (`cmd_pr`)
 > - **구체적 구현 내용**:
 >   1. **명령어 제공**: `python main.py pr`으로 실행됩니다.
 >   2. **브랜치 맥락 수집**: `collector.get_current_branch()`를 통해 현재 작업 브랜치명을 추출하여 프롬프트에 주입, 작업 목적을 추론하도록 합니다.
@@ -314,7 +314,7 @@ AI API는 외부 AI 모델의 텍스트 생성 기능을 애플리케이션에�
 
 > **구현 및 답변:**
 >
-> - **구현 위치**: [`src/validator.py`](../src/validator.py)
+> - **구현 위치**: [src/validator.py](../src/validator.py)
 > - **구체적 구현 내용**:
 >   - **후처리(Post-processing) 방식 채택**: API 재호출(재생성) 방식은 토큰 비용과 응답 지연을 2배로 증가시키므로, 1회 정밀 호출 후 소프트웨어 차원에서 결정론적으로 검증 및 다듬는 후처리 파이프라인을 채택했습니다.
 >   - **커밋 제목 길이 제한**:
@@ -327,7 +327,7 @@ AI API는 외부 AI 모델의 텍스트 생성 기능을 애플리케이션에�
 >     - 섹션 내에 `- ` 불릿이 없을 경우 첫 번째 문장에 `- `를 붙여 `[WARN] ## [섹션] 내 불릿 누락 → 기본 불릿 항목 추가` 로깅.
 >   - **구획 표시**: `--- Commit Message ---`, `--- PR Title ---`, `--- PR Body ---` 및 `[INFO] 모델: ... | 호출 횟수: 1` 메타데이터 구분선 제공.
 > - **단위 테스트 검증**:
->   - [`tests/test_assistant.py`](../tests/test_assistant.py) 내 `TestValidator` 클래스에서 길이 절삭, 섹션 보충, 불릿 강제에 대한 5개 단위 테스트가 작성되어 있으며 100% 통과합니다.
+>   - [tests/test_assistant.py](../tests/test_assistant.py) 내 `TestValidator` 클래스에서 길이 절삭, 섹션 보충, 불릿 강제에 대한 5개 단위 테스트가 작성되어 있으며 100% 통과합니다.
 > - **관련 평가 항목**: 평가 3-1, 3-2, 3-3
 
 ---
@@ -347,20 +347,20 @@ AI API는 외부 AI 모델의 텍스트 생성 기능을 애플리케이션에�
 > **구현 및 답변:**
 >
 > - **원격 리포지토리**: [GitHub Repository (nttkor/b3_2)](https://github.com/nttkor/b3_2)
-> - **루트 문서**: [`README.md`](../README.md)
+> - **루트 문서**: [README.md](../README.md)
 > - **구체적 작성 내용**:
 >   1. **설치 및 실행 방법**: Python 3.12 가상환경 구축(`python3 -m venv .venv`), 종속성 설치(`pip install -r src/requirements.txt`), 실행 엔트리포인트 안내.
->   2. **가상환경 자동 전환 안내**: 터미널에서 `source .venv/bin/activate`를 실행하지 않더라도 [`main.py`](../main.py)의 `sys.prefix` 감지 로직을 통해 자동으로 가상환경 파이썬으로 `os.execv` 전환되는 편리 기능 명시.
->   3. **환경변수 설정 방법**: [`.env`](../.env) 파일 구성(`AI_API_KEY="sk-..."`, `AI_API_BASE_URL="https://copa.codyssey.kr/v1"`, `AI_MODEL="gpt-5.4-mini"`) 및 `export AI_API_KEY="..."` 설정법 안내.
+>   2. **가상환경 자동 전환 안내**: 터미널에서 `source .venv/bin/activate`를 실행하지 않더라도 [main.py](../main.py)의 `sys.prefix` 감지 로직을 통해 자동으로 가상환경 파이썬으로 `os.execv` 전환되는 편리 기능 명시.
+>   3. **환경변수 설정 방법**: [.env](../.env) 파일 구성(`AI_API_KEY="sk-..."`, `AI_API_BASE_URL="https://copa.codyssey.kr/v1"`, `AI_MODEL="gpt-5.4-mini"`) 및 `export AI_API_KEY="..."` 설정법 안내.
 >   4. **커밋/PR 생성 명령 사용 예시**: 기본 사용법 및 단일/이중 하이픈 옵션(`-model`, `-temperature`, `-max-tokens`, `-safe-mode`) 상세 표 제공.
 >   5. **실제 출력 예시**: `python main.py commit` 및 `python main.py pr` 실제 실행 결과 전문 포함.
 >   6. **보안/민감정보 대응 (-safe-mode)**: 정규표현식 기반의 API Key, AWS 시크릿, Bearer 토큰, 이메일, 패스워드 마스킹 정책(`[MASKED_SECRET]`) 및 파일 수(10개)/줄 수(200줄) 제한 정책 설명.
 >   7. **비용 및 운영 최적화**: 1회 실행당 1회 정밀 호출 원칙, Codyssey 게이트웨이 0.5배 최저 차감 모델(`gpt-5.4-mini`) 권장 가이드 포함.
 > - **추가 연계 문서 (상대 경로)**:
->   - [`docs/EVALUATION_PLAN.md`](./EVALUATION_PLAN.md): 동료 평가 6단계 완벽 대비 계획서
->   - [`docs/CONVENTIONS.md`](./CONVENTIONS.md): 4단락 커밋 메시지 작성 컨벤션
->   - [`docs/b6-2-mission.md`](./b6-2-mission.md): 미션 원본 및 목표/요구사항 해설서
->   - [`.ai-gitgen.yml`](../.ai-gitgen.yml): 커스터마이징 설정 파일
+>   - [docs/EVALUATION_PLAN.md](./EVALUATION_PLAN.md): 동료 평가 6단계 완벽 대비 계획서
+>   - [docs/CONVENTIONS.md](./CONVENTIONS.md): 4단락 커밋 메시지 작성 컨벤션
+>   - [docs/b6-2-mission.md](./b6-2-mission.md): 미션 원본 및 목표/요구사항 해설서
+>   - [.ai-gitgen.yml](../.ai-gitgen.yml): 커스터마이징 설정 파일
 > - **관련 평가 항목**: 평가 4-1, 4-2, 4-3, 4-4
 
 
@@ -444,7 +444,7 @@ AI API는 외부 AI 모델의 텍스트 생성 기능을 애플리케이션에�
 
 - 실행(예시)
 
-- python [main.py](<http://main.py/>) commit
+- python [main.py](../main.py) commit
 
 - 터미널 출력(예시)
 
@@ -462,7 +462,7 @@ AI API는 외부 AI 모델의 텍스트 생성 기능을 애플리케이션에�
 
 - 실행(예시)
 
-- python [main.py](<http://main.py/>) pr
+- python [main.py](../main.py) pr
 
 - 터미널 출력(예시)
 
@@ -478,15 +478,15 @@ AI API는 외부 AI 모델의 텍스트 생성 기능을 애플리케이션에�
 
 - - Git 변경 사항을 기반으로 일관된 형식의 요약 텍스트를 생성해 리뷰 효율을 높이고자 했습니다.
 
-- ## What - git status, git diff 결과를 수집해 AI 입력 컨텍스트로 전달하는 로직 추가 - 커밋 메시지 자동 생성 기능(python [main.py](<http://main.py/>) commit) 구현 - PR 제목/본문 자동 생성 기능(python [main.py](<http://main.py/>) pr) 및 템플릿 적 용 - API Key 누락/요청 실패 시 에러 메시지 및 예외 처리 개선
+- ## What - git status, git diff 결과를 수집해 AI 입력 컨텍스트로 전달하는 로직 추가 - 커밋 메시지 자동 생성 기능(python [main.py](../main.py) commit) 구현 - PR 제목/본문 자동 생성 기능(python [main.py](../main.py) pr) 및 템플릿 적 용 - API Key 누락/요청 실패 시 에러 메시지 및 예외 처리 개선
 
-- ## How to Test - 환경변수 설정: export AI_API_KEY="YOUR_KEY" - 커밋 메시지 생성: python [main.py](<http://main.py/>) commit - PR 초안 생성: python [main.py](<http://main.py/>) pr - 결과로 출력된 PR 본문이 Why/What/How to Test 구조와 길이 규칙을 만족하는지 확 인
+- ## How to Test - 환경변수 설정: export AI_API_KEY="YOUR_KEY" - 커밋 메시지 생성: python [main.py](../main.py) commit - PR 초안 생성: python [main.py](../main.py) pr - 결과로 출력된 PR 본문이 Why/What/How to Test 구조와 길이 규칙을 만족하는지 확 인
 
 - AI API Key 미설정/오류 상황 예시
 
 - 실행(예시)
 
-- python [main.py](<http://main.py/>) commit
+- python [main.py](../main.py) commit
 
 - 터미널 출력(예시)
 
@@ -500,7 +500,7 @@ AI API는 외부 AI 모델의 텍스트 생성 기능을 애플리케이션에�
 
 - 실행(예시)
 
-- python [main.py](<http://main.py/>) commit
+- python [main.py](../main.py) commit
 
 - 터미널 출력(예시)
 

@@ -1,13 +1,13 @@
 # B3-2 AI Git Assistant - 심층 연구 및 기술 검증 노트 (study.md)
 
 > **문서 개요**: 본 문서는 AI Git Assistant 개발 과정에서 수행한 **LLM API 하이퍼파라미터 실동작 검증**, **옵션별(-temperature, -max-tokens) 출력 차이 실측 분석**, 그리고 **길이 및 형식 규칙 준수를 위한 이중 안전장치(프롬프트 엔지니어링 + 결정론적 후처리 검증기)**의 설계 근거를 집대성한 기술 심층 연구 문서입니다.  
-> 동료평가 요약 대비표는 [`docs/EVALUATION_QA.md`](../docs/EVALUATION_QA.md)에서 확인하실 수 있습니다.
+> 동료평가 요약 대비표는 [docs/EVALUATION_QA.md](../docs/EVALUATION_QA.md)에서 확인하실 수 있습니다.
 
 ---
 
 ## 목차
 1. [LLM 응답 필드 및 하이퍼파라미터 실동작 검증](#1-llm-응답-필드-및-하이퍼파라미터-실동작-검증)
-   - [1.1 LLM 답변 속에 temperature / max_tokens 정보가 포함되는가?](#11-llm-답변-속에-temperature--max_tokens-정보가-포함되는가)
+   - [1.1 LLM 답변 속에 temperature / max_tokens 정보가 포함되는가?](#11-llm-답변-속에-temperature-max_tokens-정보가-포함되는가)
    - [1.2 진짜 잘 설정되었는지 쿼리로 조사하는 3대 검증 방법](#12-진짜-잘-설정되었는지-쿼리로-조사하는-3대-검증-방법)
    - [1.3 CLI 터미널 피드백 메타 정보 확장 제안](#13-cli-터미널-피드백-메타-정보-확장-제안)
 2. [Temperature와 Max Tokens 옵션 변경 시 출력 차이 상세 분석 (Q1-6 심층)](#2-temperature와-max-tokens-옵션-변경-시-출력-차이-상세-분석-q1-6-심층)
@@ -145,7 +145,7 @@ print("content:", repr(resp.choices[0].message.content))
 ### 2.2 두 결과의 차이가 미미하게 느껴지는 3대 이유
 
 1. **프롬프트의 엄격한 형식 제약 (Strong Constraints)**:
-   [`src/prompt_builder.py`](../src/prompt_builder.py)에서 `제목 50자(최대 72자)`, `Conventional Commit(docs:)`, `불릿 1~2개` 형식을 촘촘하게 강제하기 때문에, 온도를 0.8로 올려도 규격 틀 안에서 어휘와 문체만 미세하게 변화합니다.
+   [src/prompt_builder.py](../src/prompt_builder.py)에서 `제목 50자(최대 72자)`, `Conventional Commit(docs:)`, `불릿 1~2개` 형식을 촘촘하게 강제하기 때문에, 온도를 0.8로 올려도 규격 틀 안에서 어휘와 문체만 미세하게 변화합니다.
 2. **Git Diff라는 "사실(Ground Truth)" 기반 컨텍스트**:
    자유 창작이 아니라 실제 코드 변경 내역(`chat.md`, `study/study.md`)만을 요약해야 하므로, 다루는 사실이 고정되어 있어 본질적 내용이 달라질 수 없습니다.
 3. **`max-tokens 1024` vs `256`의 차이가 나타나지 않은 이유**:
@@ -169,7 +169,7 @@ print("content:", repr(resp.choices[0].message.content))
 
 ### 3.1 커밋/PR 표준 규칙 충족 매트릭스
 
-| 검증 항목 | 정의된 표준 규칙 | 1차 프롬프트 유도 ([`prompt_builder.py`](../src/prompt_builder.py)) | 2차 사후 검증 하드 컷 ([`validator.py`](../src/validator.py)) |
+| 검증 항목 | 정의된 표준 규칙 | 1차 프롬프트 유도 ([prompt_builder.py](../src/prompt_builder.py)) | 2차 사후 검증 하드 컷 ([validator.py](../src/validator.py)) |
 | :--- | :--- | :--- | :--- |
 | **커밋 제목 길이** | 최대 72자 이내 | `- 제목: 50자 이내 권장(최대 72자)` 명시 | `len(title) > 72` 시 `title[:72]`로 하드 슬라이싱 절삭 및 `[WARN]` 경고 |
 | **PR 제목 길이** | 최대 80자 이내 | `- PR 제목: 최대 80자` 명시 | `len(title) > 80` 시 `title[:80]`으로 하드 슬라이싱 절삭 및 `[WARN]` 경고 |
@@ -201,7 +201,7 @@ flowchart TD
 
 ### 3.3 1단계: 프롬프트 엔지니어링 (Inference Guidance)
 
-[`src/prompt_builder.py`](../src/prompt_builder.py)는 AI가 처음부터 규격을 지켜 작성하도록 90% 이상을 유도합니다:
+[src/prompt_builder.py](../src/prompt_builder.py)는 AI가 처음부터 규격을 지켜 작성하도록 90% 이상을 유도합니다:
 
 ```python
 # src/prompt_builder.py (커밋 프롬프트)
@@ -230,7 +230,7 @@ Git 변경 사항을 분석하여 커밋 메시지를 생성하세요.
 
 ### 3.4 2단계: 결정론적 사후 검증기 (Deterministic Enforcement)
 
-[`src/validator.py`](../src/validator.py)는 LLM의 확률적 오작동(72자 초과, 불릿 누락)을 0.001초 만에 하드웨어처럼 확정적으로 보정합니다:
+[src/validator.py](../src/validator.py)는 LLM의 확률적 오작동(72자 초과, 불릿 누락)을 0.001초 만에 하드웨어처럼 확정적으로 보정합니다:
 
 ```python
 # src/validator.py (제목 하드 컷 및 불릿 강제)
@@ -283,7 +283,7 @@ def validate_pr(text: str) -> tuple[str, str]:
 ---
 
 ### 관련 파일 링크
-* [`src/prompt_builder.py`](../src/prompt_builder.py): 1차 프롬프트 엔지니어링 로직
-* [`src/validator.py`](../src/validator.py): 2차 결정론적 사후 검증기 로직
-* [`src/main.py`](../src/main.py): 프롬프트 생성 → AI 호출 → 검증기 파이프라인
-* [`docs/EVALUATION_QA.md`](../docs/EVALUATION_QA.md): 동료평가 18개 문항 핵심 요약 및 Q&A 대비집
+* [src/prompt_builder.py](../src/prompt_builder.py): 1차 프롬프트 엔지니어링 로직
+* [src/validator.py](../src/validator.py): 2차 결정론적 사후 검증기 로직
+* [src/main.py](../src/main.py): 프롬프트 생성 → AI 호출 → 검증기 파이프라인
+* [docs/EVALUATION_QA.md](../docs/EVALUATION_QA.md): 동료평가 18개 문항 핵심 요약 및 Q&A 대비집
