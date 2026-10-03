@@ -5,8 +5,9 @@ import sys
 from pathlib import Path
 
 # 가상환경(.venv)이 존재할 경우, source 활성화 없이도 .venv 파이썬으로 자동 재실행
-_venv_python = Path(__file__).resolve().parent.parent / '.venv' / 'bin' / 'python'
-if _venv_python.exists() and Path(sys.executable).resolve() != _venv_python.resolve():
+_venv_dir = Path(__file__).resolve().parent.parent / '.venv'
+_venv_python = _venv_dir / 'bin' / 'python'
+if _venv_python.exists() and Path(sys.prefix).resolve() != _venv_dir.resolve():
     os.execv(str(_venv_python), [str(_venv_python)] + sys.argv)
 
 try:

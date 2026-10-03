@@ -64,3 +64,11 @@
   - Added transparent `.venv` auto-detection and re-execution (`os.execv`) to `main.py` and `src/main.py`.
   - Resolves `ModuleNotFoundError: No module named 'dotenv'` when invoked from terminal without manual `source .venv/bin/activate`.
   - Added user-friendly installation error guidance if dependencies are missing.
+- **2026-10-03 17:37 (KST)**:
+  - Diagnosed root cause of `ModuleNotFoundError: No module named 'dotenv'` even after `source .venv/bin/activate`:
+    - macOS `/etc/zprofile` contained Ansible-managed `alias python='$PYTHON_HOME/bin/python3.12'` pointing to global Homebrew Python (`/usr/local/opt/python@3.12`).
+    - Because `.venv/bin/python` is a symlink to that same Homebrew binary, `Path(sys.executable).resolve() != _venv_python.resolve()` evaluated to `False`.
+  - Refactored auto-venv detection to compare `Path(sys.prefix).resolve() != _venv_dir.resolve()` across `main.py` and `src/main.py`.
+  - Added automatic unaliasing (`unalias python python3 pip pip3`) in `.venv/bin/activate` for interactive shells.
+  - Verified live execution with global Python binary (`/usr/local/opt/python@3.12/bin/python3.12 main.py commit`) successfully redirecting to `.venv` and completing AI commit generation.
+  - All 13 unit tests passed in 0.060s.
