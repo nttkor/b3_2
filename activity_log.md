@@ -120,5 +120,12 @@
     - Structured `study/study.md` into 3 core sections: API wire-level verification, parameter comparison deep-dive, and hybrid validation architecture.
     - Added GitHub-compatible relative markdown links between `docs/EVALUATION_QA.md` and `study/study.md`.
   - Verified 14/14 unit tests passing.
+- **2026-10-03 20:50 (KST)**:
+  - Added bidirectional traceability matrix links in `docs/EVALUATION_QA.md`:
+    - Inserted `> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item X-Y)](#5-전체-문항-추적-매트릭스-traceability-matrix)` under all 18 question headings.
+    - Added explicit anchor tags `<a id="qX-Y"></a>` for guaranteed GitHub markdown rendering.
+    - Linked table items (`[**Item X-Y**](#qX-Y)`) in Section 5 back to their corresponding question headings.
+  - Verified 14/14 unit tests passing.
+
 
 

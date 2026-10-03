@@ -17,7 +17,9 @@
 
 ---
 
-### Q1-1. 프로젝트 루트에서 커밋 메시지 생성 명령 실행 시 커밋 메시지가 터미널에 출력되는가?
+### Q1-1. 프로젝트 루트에서 커밋 메시지 생성 명령 실행 시 커밋 메시지가 터미널에 출력되는가? <a id="q1-1"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 1-1)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **네, 정상 출력됩니다.** 루트 엔트리포인트에서 `python main.py commit`을 실행하면 작업 트리의 `git status`와 `git diff`를 수집하여 AI가 생성한 Conventional Commit 규격의 커밋 메시지(제목 + 본문 불릿)가 구분선과 함께 출력됩니다.
 * **상세 설명**:
@@ -62,7 +64,9 @@
 
 ---
 
-### Q1-2. PR 생성 명령 실행 시 PR 제목과 본문 초안이 터미널에 출력되는가?
+### Q1-2. PR 생성 명령 실행 시 PR 제목과 본문 초안이 터미널에 출력되는가? <a id="q1-2"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 1-2)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **네, 정상 출력됩니다.** `python main.py pr`을 실행하면 현재 브랜치명과 변경 내역을 바탕으로 1줄 제목(`--- PR Title ---`)과 3대 필수 섹션을 포함한 본문(`--- PR Body ---`)이 구획화되어 출력됩니다.
 * **상세 설명**:
@@ -109,7 +113,9 @@
 
 ---
 
-### Q1-3. AI API Key가 설정되지 않은 상태에서 실행하면 오류 메시지가 출력되고 종료되는가?
+### Q1-3. AI API Key가 설정되지 않은 상태에서 실행하면 오류 메시지가 출력되고 종료되는가? <a id="q1-3"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 1-3)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **네, 파이썬 트레이스백(Traceback) 없이 명세서 표준 에러 문구를 출력하고 정상 종료(`sys.exit(1)`)합니다.**
 * **상세 설명**:
@@ -148,7 +154,9 @@
 
 ---
 
-### Q1-4. Git 변경 사항이 없는 상태에서 실행하면 `변경 사항이 없습니다`에 준하는 메시지가 출력되는가?
+### Q1-4. Git 변경 사항이 없는 상태에서 실행하면 `변경 사항이 없습니다`에 준하는 메시지가 출력되는가? <a id="q1-4"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 1-4)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **네, 변경 사항이 없으면 즉시 안내 문구를 출력하고 AI API 호출 없이 종료(`sys.exit(0)`)합니다.**
 * **상세 설명**:
@@ -172,7 +180,9 @@
 
 ---
 
-### Q1-5. 출력된 PR 본문에 `Why / What / How to Test` 구조가 포함되고, 각 섹션에 최소 1개 불릿이 포함되는가?
+### Q1-5. 출력된 PR 본문에 `Why / What / How to Test` 구조가 포함되고, 각 섹션에 최소 1개 불릿이 포함되는가? <a id="q1-5"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 1-5)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **네, 프롬프트 엔지니어링과 사후 검증기(Validator)의 이중 안전장치를 통해 100% 보장됩니다.**
 * **상세 설명**:
@@ -196,7 +206,9 @@
 
 ---
 
-### Q1-6. `-temperature` 또는 `-max-tokens` 값을 변경해 실행했을 때 출력 길이/디테일 차이가 재현되는가?
+### Q1-6. `-temperature` 또는 `-max-tokens` 값을 변경해 실행했을 때 출력 길이/디테일 차이가 재현되는가? <a id="q1-6"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 1-6)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **네, 옵션 지정이 정상 파싱되어 AI 모델 호출 인자로 완벽히 전달됩니다.**
 * **상세 설명**:
@@ -251,7 +263,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q1-7. 커밋/PR 출력이 정의된 길이/형식 규칙(제목 길이, 섹션 구조, 불릿 조건)을 만족하는가?
+### Q1-7. 커밋/PR 출력이 정의된 길이/형식 규칙(제목 길이, 섹션 구조, 불릿 조건)을 만족하는가? <a id="q1-7"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 1-7)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **네, 프롬프트 엔지니어링(1차 유도)과 파이썬 검증기(2차 하드 컷)의 이중 안전장치를 통해 커밋 제목(최대 72자), PR 제목(최대 80자), 섹션/불릿 규칙을 100% 만족합니다.**
 * **상세 설명**:
@@ -279,7 +293,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q2-1. Git 변경 사항 수집 로직과 AI API 호출 로직을 왜 분리했는지 설명할 수 있는가?
+### Q2-1. Git 변경 사항 수집 로직과 AI API 호출 로직을 왜 분리했는지 설명할 수 있는가? <a id="q2-1"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 2-1)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **단일 책임 원칙(SRP)과 관심사 분리(Separation of Concerns)를 통해 테스트 용이성과 유지보수성을 극대화하기 위해서입니다.**
 * **상세 설명**:
@@ -289,7 +305,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q2-2. 프롬프트 구성 로직과 출력 포맷팅(길이 규칙 포함) 로직을 어떻게 분리했고, 그 이유를 설명할 수 있는가?
+### Q2-2. 프롬프트 구성 로직과 출력 포맷팅(길이 규칙 포함) 로직을 어떻게 분리했고, 그 이유를 설명할 수 있는가? <a id="q2-2"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 2-2)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **프롬프트 구성은 "생성 유도(Inference Guidance)"의 영역이고, 출력 포맷팅은 "결정론적 사후 보증(Deterministic Enforcement)"의 영역이기 때문에 분리했습니다.**
 * **상세 설명**:
@@ -299,7 +317,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q2-3. API 파라미터를 CLI 옵션으로 설계한 이유(재현성/실험 용이성)를 설명할 수 있는가?
+### Q2-3. API 파라미터를 CLI 옵션으로 설계한 이유(재현성/실험 용이성)를 설명할 수 있는가? <a id="q2-3"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 2-3)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **개발 환경과 작업 성격(버그 수정 vs 대규모 리팩토링)에 맞춰 사용자가 유연하게 AI 생성 품질을 실험하고 재현할 수 있도록 하기 위함입니다.**
 * **상세 설명**:
@@ -308,7 +328,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q2-4. 오류 처리(API Key 누락, 네트워크 오류 등)를 어떤 방식으로 구현했고, 왜 그렇게 했는지 설명할 수 있는가?
+### Q2-4. 오류 처리(API Key 누락, 네트워크 오류 등)를 어떤 방식으로 구현했고, 왜 그렇게 했는지 설명할 수 있는가? <a id="q2-4"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 2-4)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **사용자 경험(UX)을 해치는 내부 파이썬 트레이스백을 철저히 차단하고, 발생 원인과 해결 방법(Actionable Guidance)을 명확한 터미널 문구로 제공하도록 구현했습니다.**
 * **상세 설명**:
@@ -321,7 +343,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q3-1. AI API 요청 시 `temperature` 값을 높이거나 낮추면 결과가 어떻게 달라지는지 설명할 수 있는가?
+### Q3-1. AI API 요청 시 `temperature` 값을 높이거나 낮추면 결과가 어떻게 달라지는지 설명할 수 있는가? <a id="q3-1"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 3-1)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **`temperature`는 다음 토큰 선택 시 소프트맥스 확률 분포의 평평함(Smoothing)을 조절합니다. 낮으면 결정론적이고 엄격해지며, 높으면 어휘가 다양해지지만 규칙 이탈 위험이 커집니다.**
 * **상세 설명**:
@@ -330,7 +354,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q3-2. `max_tokens` 값이 결과물에 어떤 영향을 미치며, 어떤 기준으로 값을 설정했는지 설명할 수 있는가?
+### Q3-2. `max_tokens` 값이 결과물에 어떤 영향을 미치며, 어떤 기준으로 값을 설정했는지 설명할 수 있는가? <a id="q3-2"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 3-2)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **모델이 1회 응답에서 생성할 수 있는 최대 완성 토큰 수를 강제하여 비용 낭비와 무한 생성을 방지합니다. 본 프로젝트는 3단락 PR 본문이 중간에 잘리지 않도록 `1024`로 최적화했습니다.**
 * **상세 설명**:
@@ -339,7 +365,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q3-3. 커밋/PR 용도에 맞는 결과를 얻기 위해 프롬프트에 어떤 정보를 포함했고, 왜 그렇게 구성했는지 설명할 수 있는가?
+### Q3-3. 커밋/PR 용도에 맞는 결과를 얻기 위해 프롬프트에 어떤 정보를 포함했고, 왜 그렇게 구성했는지 설명할 수 있는가? <a id="q3-3"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 3-3)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **역할 페르소나, 컨텍스트 격리(마크다운 코드 블록), Conventional/PR 템플릿 규칙, 브랜치 맥락, 네거티브 프롬프트를 포함했습니다.**
 * **상세 설명**:
@@ -349,7 +377,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q3-4. 길이/형식 규칙을 `재생성`으로 해결할지 `후처리`로 해결할지 선택했다면, 그 선택 이유를 설명할 수 있는가?
+### Q3-4. 길이/형식 규칙을 `재생성`으로 해결할지 `후처리`로 해결할지 선택했다면, 그 선택 이유를 설명할 수 있는가? <a id="q3-4"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 3-4)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **비용과 응답 지연(Latency)을 절반 이하로 줄이기 위해 `결정론적 후처리(Post-processing)` 방식을 선택했습니다.**
 * **상세 설명**:
@@ -362,7 +392,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q4-1. AI가 생성한 커밋/PR 텍스트를 바로 사용하지 않고 검토가 필요한 이유를 설명할 수 있는가?
+### Q4-1. AI가 생성한 커밋/PR 텍스트를 바로 사용하지 않고 검토가 필요한 이유를 설명할 수 있는가? <a id="q4-1"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 4-1)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **AI는 코드의 '문법적 변경'은 보지만 기획 의도나 비즈니스 맥락의 '진짜 이유'는 알지 못하며, 잠재적인 환각(Hallucination) 위험이 있기 때문입니다.**
 * **상세 설명**:
@@ -371,7 +403,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q4-2. `git diff`에 민감정보(API Key, 개인정보 등)가 포함될 수 있는 상황과 이를 방지하기 위한 방안을 설명할 수 있는가?
+### Q4-2. `git diff`에 민감정보(API Key, 개인정보 등)가 포함될 수 있는 상황과 이를 방지하기 위한 방안을 설명할 수 있는가? <a id="q4-2"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 4-2)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **설정 파일(`.env`, `.yml`)이나 코드 내에 실수로 하드코딩된 API Key, 토큰, 비밀번호가 diff에 노출될 수 있으며, 본 프로젝트는 9종 정규식 기반 `-safe-mode` 마스킹으로 이를 방어합니다.**
 * **상세 설명**:
@@ -382,7 +416,9 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 ---
 
-### Q4-3. 이 도구를 실제 팀 프로젝트에 적용한다면 어떤 기능을 가장 먼저 추가하거나 개선하고 싶은지, 그 우선순위 근거를 설명할 수 있는가?
+### Q4-3. 이 도구를 실제 팀 프로젝트에 적용한다면 어떤 기능을 가장 먼저 추가하거나 개선하고 싶은지, 그 우선순위 근거를 설명할 수 있는가? <a id="q4-3"></a>
+
+> 📊 **동료평가 추적 매트릭스**: [## 5. 전체 문항 추적 매트릭스 (Item 4-3)](#5-전체-문항-추적-매트릭스-traceability-matrix)
 
 * **핵심 답변**: **가장 먼저 `Git Pre-commit Hook 연동` 및 `대화형 확인/편집 모드 (Interactive Mode)`를 추가하고 싶습니다.**
 * **상세 설명**:
@@ -397,21 +433,21 @@ docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
 
 | 평가 문항 | 핵심 검증 대상 | 구현 소스코드 링크 | 단위 테스트 링크 |
 | :--- | :--- | :--- | :--- |
-| **Item 1-1** | 커밋 메시지 자동 생성 | [`src/main.py:cmd_commit`](../src/main.py#L42) | [`tests/test_assistant.py`](../tests/test_assistant.py) |
-| **Item 1-2** | PR 초안 자동 생성 | [`src/main.py:cmd_pr`](../src/main.py#L80) | [`tests/test_assistant.py`](../tests/test_assistant.py) |
-| **Item 1-3** | API Key 누락 예외 처리 | [`src/ai_client.py:__init__`](../src/ai_client.py#L30) | `test_missing_api_key_exits` |
-| **Item 1-4** | 변경 부재 시 조기 종료 | [`src/git_collector.py:get_diff`](../src/git_collector.py#L58) | `test_clean_repo_no_changes` |
-| **Item 1-5** | PR 3대 섹션/불릿 강제 | [`src/validator.py:validate_pr`](../src/validator.py#L32) | `test_validate_pr_ensures_bullets` |
-| **Item 1-6** | CLI 옵션 동작 (-t, -max-tokens) | [`src/main.py:build_parser`](../src/main.py#L120) | `test_single_dash_options` |
-| **Item 1-7** | 커밋/PR 제목 길이 하드 컷 | [`src/validator.py:validate_commit`](../src/validator.py#L9) | `test_validate_commit_title_truncation` |
-| **Item 2-1** | Git수집 / AI호출 책임 분리 | [`src/git_collector.py`](../src/git_collector.py), [`src/ai_client.py`](../src/ai_client.py) | SRP 계층 분리 검증 |
-| **Item 2-2** | 프롬프트 / 검증기 분리 | [`src/prompt_builder.py`](../src/prompt_builder.py), [`src/validator.py`](../src/validator.py) | 생성-검증 분리 검증 |
-| **Item 2-3** | CLI 옵션화 이유 | [`src/main.py:build_parser`](../src/main.py#L120) | 실험성/재현성 검증 |
-| **Item 2-4** | 표준 오류 처리 방식 | [`src/ai_client.py:generate`](../src/ai_client.py#L50) | 스택트레이스 차단 검증 |
-| **Item 3-1** | Temperature 파라미터 이해 | [`src/ai_client.py`](../src/ai_client.py) | Softmax 확률 조절 원리 |
-| **Item 3-2** | Max Tokens 파라미터 이해 | [`src/ai_client.py`](../src/ai_client.py) | 1024 토큰 최적화 근거 |
-| **Item 3-3** | 프롬프트 컨텍스트 설계 | [`src/prompt_builder.py`](../src/prompt_builder.py) | 브랜치 주입 및 격리 |
-| **Item 3-4** | 후처리 vs 재생성 선택 이유 | [`src/validator.py`](../src/validator.py) | 비용/지연 절감 근거 |
-| **Item 4-1** | AI 텍스트 검토 필요성 | 전체 아키텍처 | Human-in-the-loop 원칙 |
-| **Item 4-2** | Git diff 민감정보 마스킹 | [`src/git_collector.py:_mask_sensitive`](../src/git_collector.py#L8) | `test_safe_mode_masking` |
-| **Item 4-3** | 실무 개선 우선순위 | 전체 로드맵 | Git Hook & Interactive CLI |
+| [**Item 1-1**](#q1-1) | 커밋 메시지 자동 생성 | [`src/main.py:cmd_commit`](../src/main.py#L42) | [`tests/test_assistant.py`](../tests/test_assistant.py) |
+| [**Item 1-2**](#q1-2) | PR 초안 자동 생성 | [`src/main.py:cmd_pr`](../src/main.py#L80) | [`tests/test_assistant.py`](../tests/test_assistant.py) |
+| [**Item 1-3**](#q1-3) | API Key 누락 예외 처리 | [`src/ai_client.py:__init__`](../src/ai_client.py#L30) | `test_missing_api_key_exits` |
+| [**Item 1-4**](#q1-4) | 변경 부재 시 조기 종료 | [`src/git_collector.py:get_diff`](../src/git_collector.py#L58) | `test_clean_repo_no_changes` |
+| [**Item 1-5**](#q1-5) | PR 3대 섹션/불릿 강제 | [`src/validator.py:validate_pr`](../src/validator.py#L32) | `test_validate_pr_ensures_bullets` |
+| [**Item 1-6**](#q1-6) | CLI 옵션 동작 (-t, -max-tokens) | [`src/main.py:build_parser`](../src/main.py#L120) | `test_single_dash_options` |
+| [**Item 1-7**](#q1-7) | 커밋/PR 제목 길이 하드 컷 | [`src/validator.py:validate_commit`](../src/validator.py#L9) | `test_validate_commit_title_truncation` |
+| [**Item 2-1**](#q2-1) | Git수집 / AI호출 책임 분리 | [`src/git_collector.py`](../src/git_collector.py), [`src/ai_client.py`](../src/ai_client.py) | SRP 계층 분리 검증 |
+| [**Item 2-2**](#q2-2) | 프롬프트 / 검증기 분리 | [`src/prompt_builder.py`](../src/prompt_builder.py), [`src/validator.py`](../src/validator.py) | 생성-검증 분리 검증 |
+| [**Item 2-3**](#q2-3) | CLI 옵션화 이유 | [`src/main.py:build_parser`](../src/main.py#L120) | 실험성/재현성 검증 |
+| [**Item 2-4**](#q2-4) | 표준 오류 처리 방식 | [`src/ai_client.py:generate`](../src/ai_client.py#L50) | 스택트레이스 차단 검증 |
+| [**Item 3-1**](#q3-1) | Temperature 파라미터 이해 | [`src/ai_client.py`](../src/ai_client.py) | Softmax 확률 조절 원리 |
+| [**Item 3-2**](#q3-2) | Max Tokens 파라미터 이해 | [`src/ai_client.py`](../src/ai_client.py) | 1024 토큰 최적화 근거 |
+| [**Item 3-3**](#q3-3) | 프롬프트 컨텍스트 설계 | [`src/prompt_builder.py`](../src/prompt_builder.py) | 브랜치 주입 및 격리 |
+| [**Item 3-4**](#q3-4) | 후처리 vs 재생성 선택 이유 | [`src/validator.py`](../src/validator.py) | 비용/지연 절감 근거 |
+| [**Item 4-1**](#q4-1) | AI 텍스트 검토 필요성 | 전체 아키텍처 | Human-in-the-loop 원칙 |
+| [**Item 4-2**](#q4-2) | Git diff 민감정보 마스킹 | [`src/git_collector.py:_mask_sensitive`](../src/git_collector.py#L8) | `test_safe_mode_masking` |
+| [**Item 4-3**](#q4-3) | 실무 개선 우선순위 | 전체 로드맵 | Git Hook & Interactive CLI |
