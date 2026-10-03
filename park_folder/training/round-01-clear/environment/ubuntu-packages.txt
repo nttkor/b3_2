@@ -1,0 +1,4 @@
+# B3-2 — Ubuntu 24.04 mission-specific APT packages
+# Git is supplied by the Base layer. Python libraries belong in the project environment.
+python3
+python3-venv
