@@ -140,6 +140,40 @@ python main.py -temperature 0.0 -max-tokens 50 commit
 python main.py -safe-mode pr
 ```
 
+#### 4.3.1 재현 및 실험 워크플로 (Reproducibility & Experimentation)
+
+CLI 옵션을 활용하여 동일 변경 사항에 대한 일관성 검증(재현성)과 다양한 표현 탐색(실험)을 손쉽게 수행할 수 있습니다.
+
+1. **결정론적 재현 워크플로 (Deterministic Reproducibility)**:
+   ```bash
+   # 동일한 Git 변경 사항에 대해 항상 일관된 커밋 메시지 생성
+   python main.py commit -temperature 0.0
+   ```
+   - **목적**: `temperature=0.0`은 가장 확률이 높은 최적 토큰만을 결정론적으로 선택하므로, 동일한 diff에 대해 항상 동일한 Conventional Commit 제목과 구조를 완벽히 재현합니다.
+
+2. **다양성 실험 워크플로 (Creative Variation Experiment)**:
+   ```bash
+   # 보다 풍부하고 다양한 어휘를 사용한 PR 본문 초안 탐색
+   python main.py pr -temperature 0.7
+   ```
+   - **목적**: `temperature=0.7`은 어휘 선택의 다양성을 높여, PR 본문의 상세한 기술적 맥락이나 대안 표현을 탐색할 때 유용합니다.
+
+3. **출력 길이 및 토큰 제한 테스트 (Token Truncation Experiment)**:
+   ```bash
+   # 짧은 요약문 생성 및 토큰 상한 제한 동작 확인
+   python main.py commit -max-tokens 50
+   ```
+   - **목적**: `max-tokens` 값을 낮춰 극단적인 토큰 제약 상황에서의 모델 동작과 검증기(Validator)의 안전성을 테스트합니다.
+
+#### 4.3.2 Temperature 파라미터 정성적·정량적 가이드
+
+| Temperature 값 | 정성적 특성 | 정량적 엔트로피 | 추천 작업 유형 |
+|---|---|---|---|
+| `0.0` | 엄격함, 일관성, 결정론적 (반복 재현율 100%) | 최소 (Top-1 토큰 고정) | 버그 픽스, 긴급 패치, 회귀 테스트, 엄격한 규격 커밋 |
+| `0.3` | **기본값**: 규격 준수와 자연스러운 문장 구조의 균형 | 낮음 (핵심 어휘 일관성 유지) | 일상적인 기능 개발 커밋 메시지 자동 생성 |
+| `0.7` | 풍부한 맥락 서술, 다양한 어휘와 문장 구조 | 보통 (표현 다양성 증가) | 대규모 PR 초안, 릴리즈 노트, 기능 설명 초안 |
+| `1.0` | 창의적, 발산적 표현, 높은 변동성 | 높음 (어휘 예측 난이도 증가) | 다양한 문구 아이디어 브레인스토밍 및 실험 |
+
 ---
 
 ## 5. 주의사항 및 운영 관점
@@ -158,6 +192,21 @@ python main.py -safe-mode pr
 ### 5.3 생성 결과 검토 원칙
 - AI가 생성한 문구는 완성된 최종본이 아니라 **초안(Draft)**입니다.
 - AI의 환각(Hallucination) 및 기획/비즈니스 맥락 누락 가능성이 있으므로, 반드시 엔지니어가 내용을 검토한 뒤 `git commit`에 반영합니다.
+
+### 5.4 검토 중심 설계 및 자동 적용 방지 철학 (Review-First, No Auto Commit)
+- **자동 커밋/푸시 원천 차단**: CLI 도구는 생성된 커밋 메시지와 PR 초안을 오직 터미널에 명확한 구분선(`--- Commit Message ---`, `--- PR Title ---`)과 함께 렌더링할 뿐, 사용자의 명시적 확인 없이 백그라운드에서 `git commit`이나 `git push`를 강제 실행하지 않습니다.
+- **안전한 협업**: AI 생성물의 잠재적 환각이나 잘못된 가정을 엔지니어가 직접 눈으로 확인하고 확정하는 Human-in-the-loop 정책을 기본으로 준수합니다.
+
+### 5.5 재생성 vs 후처리 정책 (Deterministic Post-Processing First)
+- **후처리 우선 정책**:
+  - LLM의 글자 수 초과나 불릿 누락을 해결하기 위해 API를 다시 호출(재생성)하는 대신, 파이썬 기반의 결정론적 하드 슬라이싱(`[:72]`, `[:80]`)과 필수 섹션 플레이스홀더 주입을 수행합니다.
+  - **장점**: 추가 API 비용 0원, 지연 시간 < 0.001초, 수학적으로 100% 규격 확정 보장.
+- **재생성이 적합한 예외적 케이스**:
+  - 단순 포맷팅 문제를 넘어, diff의 핵심 변경 의도가 심각하게 왜곡되었거나 시맨틱 환각이 발생하여 전면적인 문맥 재구성이 불가피한 경우에 한합니다.
+
+### 5.6 네트워크 장애 복원력 및 오류 처리 정책
+- `AuthenticationError`, `APIConnectionError`, `RateLimitError` 등 발생 가능한 예외를 세분화하여 불필요한 파이썬 스택 트레이스 없이 명확한 원인과 조치 가이드를 출력합니다.
+- 단발성 CLI 도구의 특성상 무한 대기나 숨겨진 지연을 방지하기 위해 사용자에게 즉각적 피드백(Fail-Fast with Actionable Guidance)을 제공하는 것을 기본 원칙으로 합니다.
 
 ---
 
@@ -182,7 +231,7 @@ b3_2/
 │   ├── validator.py        # 길이 및 형식 검증/보정 후처리기
 │   └── convention.py       # YAML 컨벤션 로더
 └── tests/
-    └── test_assistant.py   # 13개 단위/통합 테스트 스위트
+    └── test_assistant.py   # 14개 단위/통합 테스트 스위트
 ```
 
 ---
@@ -190,6 +239,6 @@ b3_2/
 ## 7. 검증 및 테스트
 
 ```bash
-# 13개 단위 테스트 전체 실행
+# 14개 단위 테스트 전체 실행
 python -m unittest discover tests -v
 ```

@@ -167,4 +167,25 @@
   - Fixed remaining broken anchors in `docs/EVALUATION_QA.md` and cleaned all backticks inside link brackets repo-wide.
   - Verified 100% link resolution (31/31 anchors in `study.md`, 69/69 in `EVALUATION_QA.md`, 0 broken links).
   - Verified 14/14 unit tests passing in 0.06s.
-  - Preserved source code 100% intact (`src/` untouched per user constraint).
+- **2026-10-04 01:50 (KST)**:
+  - Analyzed Codyssey AI Pre-evaluation result (`docs/Naito_Eval.pdf`):
+    - Confirmed 16/16 all items PASSED (`시도 1 (16/16) ✓`).
+    - Identified detailed feedback for items #10~#16 (CLI option purpose & reproducibility workflow, fail-fast vs backoff policy, temperature qualitative/quantitative table, token truncation detection, post-processing vs regeneration criteria, review-first policy).
+  - Applied user instruction ("일단 미션 통과를 한 것들은 제외하자"):
+    - 100% froze and preserved source code (`src/` untouched) to avoid unnecessary complexity or regressions on already-passing code.
+    - Updated `README.md`:
+      - Added Section 4.3.1 (Reproducibility & Experimentation Workflow: deterministic reproduction with `-temperature 0.0`, creative exploration with `-temperature 0.7`, truncation test with `-max-tokens 50`).
+      - Added Section 4.3.2 (Temperature qualitative/quantitative 4-stage table: 0.0, 0.3, 0.7, 1.0).
+      - Added Section 5.4 (Review-First, No Auto Commit design philosophy).
+      - Added Section 5.5 (Deterministic Post-Processing First vs Re-generation criteria).
+      - Added Section 5.6 (Fail-Fast network error handling and backoff trade-off).
+      - Updated test suite count from 13 to 14.
+    - Enriched `docs/EVALUATION_QA.md`:
+      - Linked Q1-6 to README reproducibility workflow and temperature table.
+      - Added explicit reproducibility vs experimentation purpose to Q2-3.
+      - Clarified CLI fail-fast rationale vs exponential backoff in Q2-4.
+      - Added README temperature guide reference to Q3-1.
+      - Clarified token truncation detection (`finish_reason == 'length'`) in Q3-2.
+      - Clarified post-processing first policy vs regeneration criteria in Q3-4.
+      - Highlighted review-first no auto-commit policy in Q4-1.
+  - Verified 14/14 unit tests passing in 0.070s.
