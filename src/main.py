@@ -4,7 +4,17 @@ import os
 import sys
 from pathlib import Path
 
-from dotenv import load_dotenv
+# 가상환경(.venv)이 존재할 경우, source 활성화 없이도 .venv 파이썬으로 자동 재실행
+_venv_python = Path(__file__).resolve().parent.parent / '.venv' / 'bin' / 'python'
+if _venv_python.exists() and Path(sys.executable).resolve() != _venv_python.resolve():
+    os.execv(str(_venv_python), [str(_venv_python)] + sys.argv)
+
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError as e:
+    print(f"[ERROR] 필수 패키지가 설치되지 않았습니다 ({e}).")
+    print("## 해결 방법: source .venv/bin/activate  또는  pip install -r src/requirements.txt")
+    sys.exit(1)
 
 load_dotenv(Path.cwd() / '.env')
 load_dotenv(Path(__file__).parent / '.env')

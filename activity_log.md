@@ -60,3 +60,7 @@
   - Verified live execution of `python main.py commit` with `gpt-5.4-mini` (1.8s, full success).
   - Deleted obsolete `ref_site/` directory (commit `443ee22`) and added `chat.md` (commit `e9249b8`).
   - Synchronized and pushed all commits to remote GitHub repository (`https://github.com/nttkor/b3_2`). Working directory clean.
+- **2026-10-03 17:30 (KST)**:
+  - Added transparent `.venv` auto-detection and re-execution (`os.execv`) to `main.py` and `src/main.py`.
+  - Resolves `ModuleNotFoundError: No module named 'dotenv'` when invoked from terminal without manual `source .venv/bin/activate`.
+  - Added user-friendly installation error guidance if dependencies are missing.
