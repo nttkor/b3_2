@@ -97,3 +97,6 @@
 - **2026-10-03 18:02 (KST)**:
   - Removed obsolete legacy `docs/README.md` (Mini Git project documentation) to eliminate confusion.
   - Confirmed repository root `README.md` serves as the sole, authoritative project documentation.
+- **2026-10-03 18:05 (KST)**:
+  - Authored comprehensive architecture and folder index guide in `study/folder_index.md`.
+  - Structured into directory tree view, file responsibility table with GitHub-compatible relative links, Mermaid system architecture flowchart, Mermaid class diagram, commit/PR sequence diagrams, and safe-mode security flowcharts.
