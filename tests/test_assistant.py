@@ -156,6 +156,13 @@ class TestCLIParser(unittest.TestCase):
         self.assertTrue(args.safe_mode)
         self.assertEqual(args.command, 'pr')
 
+    def test_options_after_subcommand(self):
+        """서브커맨드 뒤에 옵션이 지정되어도 정상 파싱되어야 한다."""
+        args = self.parser.parse_args(['commit', '-temperature', '0.2', '-safe-mode'])
+        self.assertEqual(args.command, 'commit')
+        self.assertEqual(args.temperature, 0.2)
+        self.assertTrue(args.safe_mode)
+
 
 if __name__ == '__main__':
     unittest.main()

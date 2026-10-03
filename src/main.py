@@ -118,31 +118,45 @@ def cmd_pr(args: argparse.Namespace, convention: dict) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
+    def _add_common_arguments(p: argparse.ArgumentParser, is_sub: bool = False) -> None:
+        d_model = argparse.SUPPRESS if is_sub else DEFAULT_MODEL
+        d_temp = argparse.SUPPRESS if is_sub else DEFAULT_TEMPERATURE
+        d_tokens = argparse.SUPPRESS if is_sub else DEFAULT_MAX_TOKENS
+        d_safe = argparse.SUPPRESS if is_sub else False
+        d_conv = argparse.SUPPRESS if is_sub else None
+
+        p.add_argument('--model', '-model', '-m', default=d_model,
+                            help=f'AI 모델 ID (기본값: {DEFAULT_MODEL})')
+        p.add_argument('--temperature', '-temperature', '-t', type=float, default=d_temp,
+                            help=f'생성 온도 0.0~1.0 (기본값: {DEFAULT_TEMPERATURE})')
+        p.add_argument('--max-tokens', '-max-tokens', type=int, default=d_tokens,
+                            dest='max_tokens',
+                            help=f'최대 출력 토큰 수 (기본값: {DEFAULT_MAX_TOKENS})')
+        p.add_argument('--safe-mode', '-safe-mode', '-s', action='store_true', default=d_safe,
+                            help='민감 정보 마스킹 + diff 크기 제한')
+        p.add_argument('--safe-max-files', '-safe-max-files', type=int,
+                            default=argparse.SUPPRESS if is_sub else None,
+                            dest='safe_max_files',
+                            help='안전 모드 파일 수 제한 (기본값: 컨벤션 설정 또는 10)')
+        p.add_argument('--safe-max-lines', '-safe-max-lines', type=int,
+                            default=argparse.SUPPRESS if is_sub else None,
+                            dest='safe_max_lines',
+                            help='안전 모드 줄 수 제한 (기본값: 컨벤션 설정 또는 200)')
+        p.add_argument('--convention', '-convention', '-c', default=d_conv, metavar='FILE',
+                            help='컨벤션 설정 파일 경로 (기본값: .ai-gitgen.yml)')
+
     parser = argparse.ArgumentParser(
         prog='main.py',
         description='AI 기반 Git 커밋/PR 자동 생성기 (OpenRouter)',
     )
-    parser.add_argument('--model', '-model', '-m', default=DEFAULT_MODEL,
-                        help=f'AI 모델 ID (기본값: {DEFAULT_MODEL})')
-    parser.add_argument('--temperature', '-temperature', '-t', type=float, default=DEFAULT_TEMPERATURE,
-                        help=f'생성 온도 0.0~1.0 (기본값: {DEFAULT_TEMPERATURE})')
-    parser.add_argument('--max-tokens', '-max-tokens', type=int, default=DEFAULT_MAX_TOKENS,
-                        dest='max_tokens',
-                        help=f'최대 출력 토큰 수 (기본값: {DEFAULT_MAX_TOKENS})')
-    parser.add_argument('--safe-mode', '-safe-mode', '-s', action='store_true',
-                        help='민감 정보 마스킹 + diff 크기 제한')
-    parser.add_argument('--safe-max-files', '-safe-max-files', type=int, default=None,
-                        dest='safe_max_files',
-                        help='안전 모드 파일 수 제한 (기본값: 컨벤션 설정 또는 10)')
-    parser.add_argument('--safe-max-lines', '-safe-max-lines', type=int, default=None,
-                        dest='safe_max_lines',
-                        help='안전 모드 줄 수 제한 (기본값: 컨벤션 설정 또는 200)')
-    parser.add_argument('--convention', '-convention', '-c', default=None, metavar='FILE',
-                        help='컨벤션 설정 파일 경로 (기본값: .ai-gitgen.yml)')
+    _add_common_arguments(parser, is_sub=False)
 
     sub = parser.add_subparsers(dest='command', metavar='command')
-    sub.add_parser('commit', help='커밋 메시지 자동 생성')
-    sub.add_parser('pr', help='PR 제목/본문 초안 자동 생성')
+    p_commit = sub.add_parser('commit', help='커밋 메시지 자동 생성')
+    _add_common_arguments(p_commit, is_sub=True)
+
+    p_pr = sub.add_parser('pr', help='PR 제목/본문 초안 자동 생성')
+    _add_common_arguments(p_pr, is_sub=True)
 
     return parser
 
