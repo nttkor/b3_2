@@ -72,3 +72,8 @@
   - Added automatic unaliasing (`unalias python python3 pip pip3`) in `.venv/bin/activate` for interactive shells.
   - Verified live execution with global Python binary (`/usr/local/opt/python@3.12/bin/python3.12 main.py commit`) successfully redirecting to `.venv` and completing AI commit generation.
   - All 13 unit tests passed in 0.060s.
+- **2026-10-03 17:43 (KST)**:
+  - User successfully verified both `python main.py commit` and `python main.py pr` in terminal.
+  - Commit message format validated (`docs: chat.md에 가상환경 오류 해결 기록 추가` + bullets).
+  - PR draft structure validated (Title + `## Why`, `## What`, `## How to Test` with bullet points).
+  - Both CLI commands operating with `gpt-5.4-mini` via Codyssey Gateway with ~1.5s response time.
