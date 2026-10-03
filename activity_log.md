@@ -152,6 +152,10 @@
     - Added concrete proposed architecture fix code snippet and updated Section 5 Traceability Matrix table.
   - Verified with live GitHub Markdown API (192/192 `<a href=...>` links generated, 0 unrendered links).
   - Verified 14/14 unit tests passing.
+- **2026-10-03 22:17 (KST)**:
+  - User explicitly instructed: "앞으로 푸시는 하지마라 (Do not push in the future)".
+  - Updated Rule 2 across `AGENTS.md` and `GEMINI.md`: established strict policy that `git push` will never be executed automatically; only local Git commits will be performed after test pass, and remote push will only be run upon explicit user request.
+  - Verified 100% synchronization between `AGENTS.md` and `GEMINI.md`.
 
 
 

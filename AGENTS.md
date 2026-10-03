@@ -5,9 +5,10 @@
 1. **계획 수립 및 원스톱 자율 실행 (Autonomous Execution)**
    - 계획 승인 후 파일 단위로 중간 확인을 묻지 않고 완료 시까지 끝까지 일괄 처리.
 
-2. **작업 완료 후 자동 Git 커밋 (Auto Commit)**
-   - 테스트 통과 후 즉시 컨벤션(`docs/CONVENTIONS.md`)에 맞춰 자동 커밋 (`<type>: <description>`).
+2. **작업 완료 후 자동 Git 커밋 (Auto Commit, No Auto Push)**
+   - 테스트 통과 후 즉시 컨벤션(`docs/CONVENTIONS.md`)에 맞춰 로컬 자동 커밋 (`<type>: <description>`).
    - 커밋 메시지 본문에는 변경 배경, 수정된 구체적인 파일 및 로직, 해결된 문제, 검증 결과를 최대한 상세히 기록하여 커밋 로그만 보고도 작업 맥락을 완벽히 파악할 수 있도록 작성.
+   - **원격 저장소 푸시(`git push`)는 절대 자동으로 실행하지 않으며, 사용자가 명시적으로 요청할 때만 수행.**
 
 3. **최종 보고 및 시간 기록 (Final Reporting with Timestamp)**
    - 작업 완료 시 현재 로컬 시각(KST) 및 clickable한 `file://` 마크다운 링크 포함 종합 보고.
