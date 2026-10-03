@@ -43,3 +43,6 @@
 - **2026-10-03 17:00 (KST)**:
   - Synchronized and pushed all local commits to GitHub remote repository (`https://github.com/nttkor/b3_2`).
   - Working directory clean, all tests passing.
+- **2026-10-03 17:05 (KST)**:
+  - Enforced detailed commit message policy in Rule 2 across `GEMINI.md`, `AGENTS.md`, and `doc/CONVENTIONS.md`.
+  - Defined explicit structure: Why, What (file/logic breakdown), Impact, Verification.
