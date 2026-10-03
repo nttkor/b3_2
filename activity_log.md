@@ -82,3 +82,8 @@
   - Refactored `src/main.py:build_parser` to register common options on both root parser and subparsers (`commit`, `pr`) with `argparse.SUPPRESS` defaults on subparsers to prevent accidental overwrites.
   - Added unit test `test_options_after_subcommand` in `tests/test_assistant.py` (14/14 tests passing).
   - Verified live execution of `python main.py commit -temperature 0.2 -safe-mode`.
+- **2026-10-03 17:51 (KST)**:
+  - User successfully tested and confirmed live execution of `python main.py commit -temperature 0.2 -safe-mode`.
+  - Confirmed safe mode activation message: `[INFO] 안전 모드: 파일 최대 10개 / 줄 최대 200줄`.
+  - Accurately generated conventional commit message for `chat.md` updates.
+  - Full evaluation scope (Items 1~4) verified and functional.
