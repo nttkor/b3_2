@@ -134,6 +134,11 @@
     - Cleaned false domain URLs in `docs/b6-2-mission.md` (converted false http links to valid `main.py` file links).
   - Verified with automated scripts: 0 broken anchors, 0 broken file paths, 0 backticks inside link text across all 14 repository markdown files.
   - Verified 14/14 unit tests passing.
+- **2026-10-03 21:38 (KST)**:
+  - Added comprehensive module overviews, function docstrings (Args, Returns, Raises), and step-by-step inline comments across all source files in `src/` (`ai_client.py`, `convention.py`, `git_collector.py`, `main.py`, `prompt_builder.py`, `validator.py`) and root `main.py` per Rule 4.
+  - 100% preserved all existing logic and comments.
+  - Recalculated symbol positions and updated all 83 line number links in `docs/EVALUATION_QA.md` to ensure exact line accuracy.
+  - Verified with automated tests (14/14 tests passing) and live CLI execution (`python main.py commit`).
 
 
 
