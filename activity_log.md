@@ -4,9 +4,9 @@
 - **Project:** B3-2 AI Git Assistant (내가 고친 코드 설명을 AI가 대신 써주는 도우미 만들기)
 - **Root Directory:** `/Users/mpeg46551/b3_2`
 - **Python Virtualenv:** `/Users/mpeg46551/b3_2/.venv` (Python 3.12)
-- **Evaluation Plan:** `/Users/mpeg46551/b3_2/doc/EVALUATION_PLAN.md`
-- **Peer Evaluation Questions:** `/Users/mpeg46551/b3_2/doc/EVALUATION.md`
-- **Conventions:** `/Users/mpeg46551/b3_2/doc/CONVENTIONS.md` (`docs/CONVENTIONS.md`)
+- **Evaluation Plan:** `/Users/mpeg46551/b3_2/docs/EVALUATION_PLAN.md`
+- **Peer Evaluation Questions:** `/Users/mpeg46551/b3_2/docs/EVALUATION.md`
+- **Conventions:** `/Users/mpeg46551/b3_2/docs/CONVENTIONS.md`
 
 ## 2. Directory Structure & Key Files
 - `main.py`: Root CLI entry point (`python main.py commit`, `python main.py pr`)
@@ -49,3 +49,6 @@
 - **2026-10-03 17:09 (KST)**:
   - Authored comprehensive root `README.md` meeting all 3 final deliverables and section requirements from the mission PDF.
   - Linked all documentation (`EVALUATION_PLAN.md`, `CONVENTIONS.md`) and verified 100% mission readiness.
+- **2026-10-03 17:12 (KST)**:
+  - Unified `doc` and `docs` into a single `docs/` directory per user request (`git mv doc docs`).
+  - Removed legacy symlink and updated all markdown file references.

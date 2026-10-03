@@ -170,7 +170,7 @@ b3_2/
 ├── .gitignore              # .env 및 가상환경 격리
 ├── activity_log.md         # 안티그래비티 작업 메모리
 ├── README.md               # 프로젝트 사용 가이드 (본 문서)
-├── doc/
+├── docs/
 │   ├── EVALUATION_PLAN.md  # 동료평가 대비 6단계 종합 평가 계획서
 │   ├── EVALUATION.md       # 동료평가 질문 원문
 │   └── CONVENTIONS.md      # Git 커밋 컨벤션 가이드
