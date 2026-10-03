@@ -1,9 +1,0 @@
-schema_version: 1
-current_mission_id: B5-2
-previous_mission_ids:
-  - B3-2
-stable_topic_id: mini-git
-official_title_ko: "파일이 언제 어떻게 바뀌었는지 기록하는 작은 프로그램 만들기"
-repository: MetaStudy999/codyssey-basic-mini-git
-control_tower_map: https://github.com/MetaStudy999/codyssey-basic/blob/main/CURRENT-MISSION-MAP.md
-numbering_updated_at: "2026-09-03"

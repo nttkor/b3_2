@@ -1,0 +1,4 @@
+# B6-2 — Ubuntu 24.04 mission-specific APT packages
+# Git is supplied by the Base layer. AI/client libraries belong in the repository-local .venv.
+python3
+python3-venv
