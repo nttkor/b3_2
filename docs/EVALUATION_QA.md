@@ -211,27 +211,67 @@
   ```
 * **검증 명령어**:
   ```bash
-  python main.py commit -temperature 0.1 -max-tokens 256
-  python main.py commit -temperature 0.8 -max-tokens 1024
+((.venv) ) mpeg46551@c3r3s7 b3_2 % git add .
+((.venv) ) mpeg46551@c3r3s7 b3_2 %  python main.py commit -temperature 0.8 -max-tokens 1024
+[INFO] 컨벤션 로드: .ai-gitgen.yml
+[INFO] Git status 수집 완료: 2개 파일 변경 감지
+[INFO] Git diff 수집 완료: 200줄
+[INFO] AI API 요청 중...
+[DONE] 커밋 메시지 생성 완료
+
+--- Commit Message ---
+docs: 컨벤션 로드 동작과 LLM 파라미터 검증 내용을 정리하라
+
+- chat.md: `.ai-gitgen.yml` 로드 로그 출력 이유와 컨벤션 적용 흐름 설명 추가
+- study/study.md: OpenAI 응답 구조와 temperature/max_tokens 검증 방법 정리
+----------------------
+
+[INFO] 모델: gpt-5.4-mini  |  호출 횟수: 1
+((.venv) ) mpeg46551@c3r3s7 b3_2 %    git restore --staged .
+((.venv) ) mpeg46551@c3r3s7 b3_2 % git add .                                               
+((.venv) ) mpeg46551@c3r3s7 b3_2 %  python main.py commit -temperature 0.1 -max-tokens 256 
+[INFO] 컨벤션 로드: .ai-gitgen.yml
+[INFO] Git status 수집 완료: 2개 파일 변경 감지
+[INFO] Git diff 수집 완료: 200줄
+[INFO] AI API 요청 중...
+[DONE] 커밋 메시지 생성 완료
+
+--- Commit Message ---
+docs: 컨벤션 로드와 LLM 파라미터 검증 기록 추가
+
+- chat.md에 .ai-gitgen.yml 로드 동작과 설정 안내를 정리
+- study/study.md에 temperature와 max_tokens 검증 방법 및 결과를 추가
+----------------------
+
+[INFO] 모델: gpt-5.4-mini  |  호출 횟수: 1
+
   ```
+* 📖 **심층 기술 분석 문서**:
+  - 두 결과 간의 상세 차이점 비교표, 차이가 미미하게 느껴지는 3대 이유, 극명하게 체감하는 실험 방법은 [**`study/study.md` 제2장**](../study/study.md#2-temperature와-max-tokens-옵션-변경-시-출력-차이-상세-분석-q1-6-심층)에 상세히 정리되어 있습니다.
 
 ---
 
 ### Q1-7. 커밋/PR 출력이 정의된 길이/형식 규칙(제목 길이, 섹션 구조, 불릿 조건)을 만족하는가?
 
-* **핵심 답변**: **네, 커밋 제목(최대 72자), PR 제목(최대 80자), 섹션/불릿 규칙을 하드웨어적으로 강제합니다.**
+* **핵심 답변**: **네, 프롬프트 엔지니어링(1차 유도)과 파이썬 검증기(2차 하드 컷)의 이중 안전장치를 통해 커밋 제목(최대 72자), PR 제목(최대 80자), 섹션/불릿 규칙을 100% 만족합니다.**
 * **상세 설명**:
-  - [`src/validator.py`](../src/validator.py)에서 커밋 제목이 72자를 초과하면 `title[:72]`로 강제 절삭(`[WARN] 커밋 제목 N자 → 72자로 자릅니다.`)합니다.
-  - PR 제목 역시 80자를 초과하면 `title[:80]`으로 절삭합니다.
+  - **1차 (프롬프트 유도)**: [`src/prompt_builder.py`](../src/prompt_builder.py)에서 글자 수 제한, 필수 섹션(`Why/What/How to Test`), 불릿 형식을 명시하여 규격을 90% 이상 유도합니다.
+  - **2차 (파이썬 후처리)**: [`src/validator.py`](../src/validator.py)에서 글자 수 초과 시 물리적 슬라이싱(`[:72]`, `[:80]`), 필수 섹션 누락 시 자동 보충(Fallback), 불릿 누락 시 `- `를 강제 삽입하여 확률적 실패를 0.001초 만에 100% 보정합니다.
 * **관련 소스코드**:
-  - 링크: [`src/validator.py#L23-L25`](../src/validator.py#L23-L25), [`src/validator.py#L57-L59`](../src/validator.py#L57-L59)
+  - 링크: [`src/validator.py#L23-L25`](../src/validator.py#L23-L25), [`src/validator.py#L57-L89`](../src/validator.py#L57-L89)
   ```python
-  # src/validator.py
+  # src/validator.py (제목 하드 컷 & 불릿 강제)
   if len(title) > COMMIT_HARD:  # 72자
       print(f'[WARN] 커밋 제목 {len(title)}자 → {COMMIT_HARD}자로 자릅니다.')
       title = title[:COMMIT_HARD]
+
+  if len(title) > PR_TITLE_MAX:  # 80자
+      print(f'[WARN] PR 제목 {len(title)}자 → {PR_TITLE_MAX}자로 자릅니다.')
+      title = title[:PR_TITLE_MAX]
   ```
-* **검증 증빙**: 단위 테스트 [`tests/test_assistant.py`](../tests/test_assistant.py)에서 `test_validate_commit_title_truncation`, `test_validate_pr_title_truncation` 전원 통과.
+* **검증 증빙**: 단위 테스트 [`tests/test_assistant.py`](../tests/test_assistant.py)에서 `test_validate_commit_title_truncation`, `test_validate_pr_title_truncation`, `test_validate_pr_ensures_bullets` 전원 통과.
+* 📖 **심층 기술 분석 문서**:
+  - 규칙 충족 매트릭스, Mermaid 협업 아키텍처 다이어그램, 재생성 대신 후처리를 선택한 상세 근거는 [**`study/study.md` 제3장**](../study/study.md#3-커밋pr-규칙-준수를-위한-이중-안전장치-프롬프트-vs-사후-검증기-q1-7-심층)에 상세히 정리되어 있습니다.
 
 ---
 

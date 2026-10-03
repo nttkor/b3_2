@@ -1177,3 +1177,72 @@ b6-2-mission.md:46-157의 ## 3. 과제 목표 에 명시된 5가지 핵심 학�
   • 작업 트리: 완전히 깨끗한 클린 상태
 
   보고 시각: 2026-10-03 18:13:51 (KST)
+------
+> [INFO] 컨벤션 로드: .ai-gitgen.yml 표시되는 이유가 뭐야
+● Read(~/b3_2/src/convention.py)
+● Read(~/b3_2/src/main.py)
+● Read(~/b3_2/.ai-gitgen.yml) (ctrl+o to expand)
+
+▸ Thought for 9s, 874 tokens
+  The presence of the configuration file `.ai-gitgen.yml` in the root directory is confirmed, leading to its parsing using the `pyyaml` library. This allows customization of commit and PR rules without modifying the code directly. The configuration...
+● Bash(TZ="Asia/Seoul" date +"%Y-%m-%d %H:%M:%S %Z") (ctrl+o to expand)
+
+  [INFO] 컨벤션 로드: .ai-gitgen.yml이 출력되는 이유는, 프로그램이 실행될 때 프로젝트 루트에 있는 컨벤션(규칙) 설정 파일(.ai-gitgen.yml)을 성공적으로 찾아서 AI 프롬프트 생성 규칙에 적용했음을 사용자에게 알려주기 위해서입니다.
+  구체적인 동작 원리와 설계 배경은 다음과 같습니다.
+  ──────
+  ### 1. 코드 동작 흐름 (convention.py:19-35)
+  python main.py commit 또는 pr 명령어를 실행하면, main.py:168에서 가장 먼저 컨벤션 로더를 호출합니다:
+    # src/main.py
+    def main() -> None:
+        ...
+        convention = conv.load(args.convention) # 기본값: .ai-gitgen.yml
+        ...
+  convention.py:23-31 내부에서는:
+
+  1. 지정된 설정 파일(config_path = .ai-gitgen.yml)이 존재하는지 검사합니다.
+  2. 파일이 존재하면 YAML을 읽어서 파싱합니다.
+  3. 파싱 성공 시 **"설정 파일이 정상적으로 읽혀 기본값에 병합되었음"**을 명시적으로 안내하기 위해 아래 로그를 출력합니다:
+    merged = {**DEFAULTS, **data.get('convention', {})}
+    print(f'[INFO] 컨벤션 로드: {config_path}')
+    return merged
+
+  ──────
+  ### 2. .ai-gitgen.yml 파일에는 어떤 규칙이 들어있나요?
+
+  이 파일은 팀이나 개인의 규칙에 맞춰 파이썬 코드를 한 줄도 수정하지 않고 AI의 커밋/PR 작성 방식을 커스터마이징할 수 있는 설정 파일입니다:
+
+    # .ai-gitgen.yml
+    convention:
+      # 1. 커밋 메시지 언어 (ko: 한국어 / en: 영어)
+      commit_language: ko
+
+      # 2. Conventional Commits 접두사 (feat:, fix:, docs: 등) 강제 여부
+      commit_prefix: true
+
+      # 3. PR 본문 언어
+      pr_language: ko
+
+      # 4. PR 본문에 필수 포함할 섹션 목록 및 순서
+      pr_sections:
+        - Why
+        - What
+        - How to Test
+
+      # 5. 안전 모드(-safe-mode) 시 분석할 최대 파일 및 줄 수
+      safe_max_files: 10
+      safe_max_lines: 200
+  ──────
+  ### 3. 왜 이 로그를 출력하도록 설계되었는가? (UX 투명성)
+
+  • 어떤 규칙이 적용 중인지 명확히 전달: 사용자가 별도 옵션 없이 실행했을 때, AI가 내장 기본값(하드코딩)으로 도는 중인지, 아니면 프로젝트 전용 설정 파일(.ai-gitgen.yml)의 지침을 따르고 있는지 투명하게 인지할 수 있습니다.
+  • 사용자 정의 파일 교체 확인: 만약 다른 설정 파일을 사용할 때(python main.py commit -convention my_team.yml), 원하는 설정 파일이 정상적으로 로드되었는지 즉시 눈으로 확인할 수 있습니다.
+      • 파일이 없으면 [WARN] 컨벤션 파일 없음: my_team.yml → 기본값 사용 경고가 출력됩니다.
+
+  ──────
+  ### 관련 파일 링크
+
+  • .ai-gitgen.yml:1-25: 프로젝트 커밋/PR 규칙 설정 파일
+  • convention.py:19-35: YAML 파일 로드 및 안내 로그 출력 로직
+  • main.py:164-176: 최상위 엔트리포인트 및 컨벤션 주입 흐름
+
+  보고 시각: 2026-10-03 19:31:21 (KST)

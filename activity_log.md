@@ -114,4 +114,11 @@
     1. Wire-level request body inspection via `with_raw_response` (`{"max_tokens":1024,"temperature":0.1}`).
     2. Truncation and finish reason verification via `finish_reason == 'length'` and `completion_tokens`.
     3. Output variance analysis across low (0.0/0.1) vs high (1.5) temperatures.
+- **2026-10-03 19:58 (KST)**:
+  - Refactored `docs/EVALUATION_QA.md` and `study/study.md` per user request:
+    - Moved lengthy technical analyses, comparison tables, and architectural Mermaid diagrams from Q1-6 and Q1-7 into `study/study.md`.
+    - Structured `study/study.md` into 3 core sections: API wire-level verification, parameter comparison deep-dive, and hybrid validation architecture.
+    - Added GitHub-compatible relative markdown links between `docs/EVALUATION_QA.md` and `study/study.md`.
+  - Verified 14/14 unit tests passing.
+
 
