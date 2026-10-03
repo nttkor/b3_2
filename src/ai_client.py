@@ -32,11 +32,16 @@ class AIClient:
             print('## 예) export AI_API_KEY="YOUR_KEY"')
             sys.exit(1)
 
-        base_url = (
-            os.environ.get('AI_API_BASE_URL')
-            or os.environ.get('OPENAI_BASE_URL')
-            or OPENROUTER_BASE
-        )
+        explicit_url = os.environ.get('AI_API_BASE_URL') or os.environ.get('OPENAI_BASE_URL')
+        if explicit_url:
+            base_url = explicit_url
+        elif api_key.startswith('sk-cody-'):
+            base_url = 'https://copa.codyssey.kr/v1'
+        elif api_key.startswith('sk-or-'):
+            base_url = OPENROUTER_BASE
+        else:
+            base_url = OPENROUTER_BASE
+
         self.client = OpenAI(base_url=base_url, api_key=api_key)
         self.model = model
         self.temperature = temperature

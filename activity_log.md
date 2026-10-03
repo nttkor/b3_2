@@ -35,3 +35,8 @@
     - Enhanced `src/validator.py` with bullet enforcement and section completion.
   - Authored comprehensive evaluation plan: `doc/EVALUATION_PLAN.md`.
   - Created automated test suite: `tests/test_assistant.py` (13 tests all passing).
+- **2026-10-03 16:58 (KST)**:
+  - Configured `.env` with Codyssey OpenAI proxy endpoint (`https://copa.codyssey.kr/v1`).
+  - Integrated `gpt-5.4-mini` as the primary default model (0.5 deduction weight, fast response speed, full temperature support).
+  - Enhanced `src/ai_client.py` with automatic base URL routing for `sk-cody-` keys.
+  - Verified live execution of `python main.py commit` and `python main.py pr` using real Codyssey API Gateway.

@@ -1,5 +1,6 @@
 """AI 기반 Git 커밋/PR 자동 생성기."""
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -14,7 +15,7 @@ from git_collector import GitCollector
 from prompt_builder import build_commit_prompt, build_pr_prompt
 from validator import validate_commit, validate_pr
 
-DEFAULT_MODEL = 'anthropic/claude-3.5-haiku'
+DEFAULT_MODEL = os.environ.get('AI_MODEL', 'gpt-5.4-mini')
 DEFAULT_TEMPERATURE = 0.3
 DEFAULT_MAX_TOKENS = 1024
 
