@@ -131,7 +131,15 @@
   ```
 * **검증 명령어 및 실제 출력**:
   ```bash
-  env -u AI_API_KEY -u OPENROUTER_API_KEY -u OPENAI_API_KEY python main.py commit
+  .env 파일명을 바꾸고 실해해보면 됨
+  ((.venv) ) mpeg46551@c3r3s7 b3_2 % python main.py commit                               
+[INFO] 컨벤션 로드: .ai-gitgen.yml
+[INFO] Git status 수집 완료: 1개 파일 변경 감지
+[INFO] Git diff 수집 완료: 0줄
+[INFO] AI API 요청 중...
+[ERROR] AI_API_KEY 환경변수가 설정되지 않았습니다.
+
+## 예) export AI_API_KEY="YOUR_KEY"
   ```
   ```text
   [ERROR] AI_API_KEY 환경변수가 설정되지 않았습니다.
@@ -157,9 +165,7 @@
 * **검증 명령어 및 실제 출력**:
   ```bash
   # 작업 트리가 깨끗한 상태에서 실행
-  python main.py commit
-  ```
-  ```text
+  ((.venv) ) mpeg46551@c3r3s7 b3_2 % python main.py commit                                                          
   [INFO] 컨벤션 로드: .ai-gitgen.yml
   [INFO] 변경 사항이 없습니다. 커밋 메시지를 생성하지 않고 종료합니다.
   ```
