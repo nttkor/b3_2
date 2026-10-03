@@ -1027,3 +1027,47 @@ b6-2-mission.md:46-157의 ## 3. 과제 목표 에 명시된 5가지 핵심 학�
   • 최신 커밋: 085cfdc https://github.com/nttkor/b3_2/commit/085cfdc (GitHub origin/main 푸시 완료)
   • 단위 테스트: 14개 테스트 전원 통과 (0.059s)
   • 작업 트리: 완전히 깨끗한 클린 상태
+---------------------
+
+  요청하신 대로 folder_index.md에 리포지토리 폴더 구조, 파일별 단일 책임(SRP), 클래스 다이어그램, 실행 순서도 및 시퀀스 다이어그램을 머메이드(Mermaid) 차트로 정밀하게 시각화한 종합 가이드 문서를
+  작성하여 배포 완료했습니다!
+  ──────
+  ### folder_index.md 문서 구성 요약
+
+    b3_2/study/folder_index.md
+
+  #### 1. 전체 디렉토리 구조 트리 및 파일 색인 표
+
+  • 루트부터 src/, docs/, tests/, study/ 디렉토리의 모든 파일에 대한 단일 책임(SRP), 입출력 명세, 계층(Layer) 분류를 정리.
+  • GitHub 웹 브라우저에서도 클릭 한 번으로 소스코드로 이동할 수 있도록 상대 경로(../src/..., ../main.py, ../README.md 등) 로 완벽하게 연결.
+
+  #### 2. 시스템 계층 아키텍처 다이어그램 (flowchart TD)
+
+  • 사용자 인터페이스 계층 → 진입 및 가상환경 자동화 계층(sys.prefix) → 컨트롤러 계층 → Git 수집 및 인프라 계층 → 프롬프트 엔진 계층 → AI 게이트웨이 연동 계층 → 사후 검증(Validator) 계층 → 터미널 뷰
+  계층까지의 엔드투엔드 파이프라인 시각화.
+
+  #### 3. 객체 모델 및 클래스 다이어그램 (classDiagram)
+
+  • RootMain, CLIController, GitCollector, AIClient, PromptBuilder, Validator, ConventionLoader의 필드, 메서드, 반환 타입 및 모듈 간 의존성/연관 관계 명시.
+
+  #### 4. 실행 순서도 및 워크플로우 다이어그램 (sequenceDiagram & flowchart)
+
+  • 4.1 커밋 메시지 자동 생성 시퀀스: CLI 호출부터 Git diff 수집, 프롬프트 주입, gpt-5.4-mini 1회 정밀 호출, 제목 72자 검증 및 구획 출력까지 14단계 흐름도.
+  • 4.2 PR 초안 자동 생성 시퀀스: 브랜치 맥락 추출, ## Why/## What/## How to Test 3대 섹션 강제 및 불릿(-) 자동 보충 흐름도.
+  • 4.3 안전 모드 워크플로우 (flowchart LR): 9종 정규표현식 민감정보(API 키, JWT, AWS 키, 이메일 등) 마스킹([MASKED_...]) 및 10개 파일 / 200줄 절삭 파이프라인.
+
+  #### 5. 핵심 아키텍처 결정 사항 (ADR)
+
+  • 투명한 가상환경 자동 전환(sys.prefix + os.execv) 결정 배경 및 원리.
+  • 1회 정밀 호출 및 초저비용 고속 모델(gpt-5.4-mini) 선정 이유.
+  • 확률적 편차를 방어하는 결정론적 사후 검증(Post-validation) 원칙.
+  ──────
+  ### 저장소 동기화 상태
+
+  • 생성 파일: folder_index.md
+  • 작업 메모리 기록: activity_log.md
+  • Git 커밋 및 푸시: e14b8ee https://github.com/nttkor/b3_2/commit/e14b8ee (GitHub origin/main 반영 완료)
+  • 단위 테스트: 14개 테스트 전원 통과 (0.059s)
+  • 작업 트리: 완전히 깨끗한 클린 상태
+
+  보고 시각: 2026-10-03 18:05:21 (KST)
