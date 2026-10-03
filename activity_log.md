@@ -104,3 +104,6 @@
   - Authored comprehensive execution lifecycle deep-dive document in `study/project_summary.md`.
   - Detailed the 8-step pipeline from process bootstrap (sys.prefix/os.execv), CLI parsing, Git inspection & clean repo early exit, safe-mode sanitization, prompt engineering, AI API 1-shot invocation, deterministic post-validation, to terminal rendering.
   - Included comparison matrix and edge case handling strategies.
+- **2026-10-03 18:12 (KST)**:
+  - Authored peer evaluation preparation guide in `docs/EVALUATION_QA.md` based strictly on `docs/EVALUATION.md`.
+  - Covered all 18 evaluation questions across Items 1 to 4 with summary answers, deep explanations, relevant source code snippets, GitHub-compatible relative path links, verification commands, live terminal outputs, and an evaluation traceability matrix.
