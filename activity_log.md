@@ -107,3 +107,11 @@
 - **2026-10-03 18:12 (KST)**:
   - Authored peer evaluation preparation guide in `docs/EVALUATION_QA.md` based strictly on `docs/EVALUATION.md`.
   - Covered all 18 evaluation questions across Items 1 to 4 with summary answers, deep explanations, relevant source code snippets, GitHub-compatible relative path links, verification commands, live terminal outputs, and an evaluation traceability matrix.
+- **2026-10-03 18:43 (KST)**:
+  - Investigated API response payloads and wire-level verification for `-temperature` and `-max-tokens`.
+  - Proved that standard OpenAI REST API response bodies do not echo back request hyperparameters (`temperature`, `max_tokens`).
+  - Demonstrated 3 empirical verification methods:
+    1. Wire-level request body inspection via `with_raw_response` (`{"max_tokens":1024,"temperature":0.1}`).
+    2. Truncation and finish reason verification via `finish_reason == 'length'` and `completion_tokens`.
+    3. Output variance analysis across low (0.0/0.1) vs high (1.5) temperatures.
+

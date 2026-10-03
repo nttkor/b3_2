@@ -1071,3 +1071,109 @@ b6-2-mission.md:46-157의 ## 3. 과제 목표 에 명시된 5가지 핵심 학�
   • 작업 트리: 완전히 깨끗한 클린 상태
 
   보고 시각: 2026-10-03 18:05:21 (KST)
+
+--------
+요청하신 대로 project_summary.md에 터미널에서 명령어를 입력했을 때 실행 순서별로 내부에서 어떤 일이 일어나는지(Execution Lifecycle) 를 개요부터 로우 레벨 상세 구현까지 완벽하게 정리한 기술 문서를
+  작성하여 배포 완료했습니다!
+  ──────
+  ### project_summary.md 핵심 내용 요약
+
+    b3_2/study/project_summary.md
+
+  #### 1. 전체 실행 파이프라인 (High-Level Pipeline)
+
+  사용자가 엔터를 치는 순간부터 최종 터미널 출력까지 8단계 엄격한 흐름을 거칩니다:
+
+  │ Diagram exceeds terminal width (259 > 204 cols)
+  │ Displayed as code block. Widen terminal to view inline.
+
+    flowchart LR
+        S1["Step 1<br>부트스트랩<br>(Auto-venv)"] --> S2["Step 2<br>CLI 파싱<br>(Argparse)"] --> S3["Step 3<br>Git 수집<br>(Clean체크)"] --> S4["Step 4<br>보안 마스킹<br>(Safe-Mode)"]
+        S4 --> S5["Step 5<br>프롬프트 구성<br>(Context)"] --> S6["Step 6<br>AI 호출<br>(Gateway)"] --> S7["Step 7<br>사후 검증<br>(Validator)"] --> S8["Step 8<br>구획 렌더링<br>(Output)"]
+  ──────
+  #### 2. 실행 순서별 동작 상세
+
+  1. [Step 1] 프로세스 부트스트랩 & 가상환경 자동 전환 (main.py)
+      • 개요: source 활성화를 깜빡했거나 macOS zsh의 전역 별칭(alias python=...)이 걸려 있어도 100% 가상환경에서 동작하도록 보장.
+      • 상세: sys.prefix와 .venv 경로를 비교하여 가상환경 외부일 경우 os.execv로 .venv/bin/python으로 프로세스를 즉시 교체 재실행.
+  2. [Step 2] CLI 인자 파싱 및 설정 주입 (main.py, convention.py)
+      • 개요: 서브커맨드(commit, pr)와 단일/이중 하이픈 옵션(-model, -temperature, -safe-mode)을 파싱하고 .env를 메모리에 로드.
+      • 상세: 서브파서에 argparse.SUPPRESS를 적용하여 옵션이 서브커맨드 앞/뒤 어느 위치에 오더라도 값 유실이나 충돌 없이 안정적 파싱.
+  3. [Step 3] Git 저장소 검증 및 작업 상태 수집 (git_collector.py)
+      • 개요: Git 저장소 루트 여부 확인 및 Staged/Unstaged 통합 diff 수집.
+      • 상세: git rev-parse 유효성 검사, git diff HEAD 수집. 수정 사항이 없는 경우(diff.strip() == '') API를 호출하지 않고 [INFO] 변경 사항이 없습니다... 출력 후 sys.exit(0)으로 즉시 정상 종료.
+  4. [Step 4] 보안 필터링 및 데이터 축소 (git_collector.py)
+      • 개요: -safe-mode 지정 시 diff 내 민감정보를 사전에 걸러냄.
+      • 상세: 9종 정규표현식으로 API 키, JWT, AWS 키, 이메일, 패스워드 등을 [MASKED_...]로 치환하고, 최대 10개 파일 / 200줄로 diff를 절삭.
+  5. [Step 5] 프롬프트 엔지니어링 및 컨텍스트 조립 (prompt_builder.py)
+      • 개요: AI가 요구사항에 맞는 요약을 작성하도록 지시문과 diff를 마크다운 블록으로 분리 결합.
+      • 상세: 커밋(Conventional Commits, 제목 1줄, 본문 불릿), PR(브랜치 맥락 주입, Why/What/How to Test 템플릿 고정).
+  6. [Step 6] AI API 게이트웨이 연동 및 1회 정밀 호출 (ai_client.py)
+      • 개요: OpenAI SDK를 통해 Codyssey Gateway에 1회 정밀 요청 전송.
+      • 상세: AI_API_KEY 로드, sk-cody- 감지 시 Codyssey 프록시 자동 연결, 초고속·저비용 모델(gpt-5.4-mini, 0.5배 감면) 1회 호출. 인증 실패 시 스택 트레이스 없는 표준 안내문 출력 후 종료.
+  7. [Step 7] 결정론적 사후 검증 및 텍스트 다듬기 (validator.py)
+      • 개요: LLM의 확률적 오작동(길이 초과, 섹션/불릿 누락)을 소프트웨어 차원에서 100% 보정.
+      • 상세: 커밋 제목 72자, PR 제목 80자 하드 컷 절삭([WARN] 출력), PR 3대 필수 섹션 누락 시 자동 보완(Fallback), 줄글 형태일 때 -  불릿 자동 주입.
+  8. [Step 8] 구획화된 터미널 출력 및 메타 피드백 (main.py)
+      • 개요: 사용자가 결과를 바로 복사할 수 있도록 터미널에 구분선과 함께 출력.
+      • 상세: --- Commit Message --- / --- PR Title --- & --- PR Body --- 블록 및 사용 모델/호출 횟수(1회) 피드백.
+
+  ──────
+  #### 3. 추가 수록 내용
+
+  • Commit vs PR 실행 흐름 비교 매트릭스 (컨텍스트, 템플릿, 검증 기준, 출력 구획 비교)
+  • 6대 장애 상황별(Edge Cases) 방어 매커니즘 표 (저장소 미초기화, Clean 상태, 키 누락, 옵션 순서, 글자 수 초과, 섹션 누락)
+  ──────
+  ### 저장소 동기화 상태
+
+  • 생성 파일: project_summary.md
+  • 작업 메모리 기록: activity_log.md
+  • Git 커밋 및 푸시: d2bd23a https://github.com/nttkor/b3_2/commit/d2bd23a (GitHub origin/main 반영 완료)
+  • 단위 테스트: 14개 테스트 전원 통과 (0.058s)
+  • 작업 트리: 완전히 깨끗한 클린 상태
+
+  보고 시각: 2026-10-03 18:09:41 (KST)
+  ---------
+
+   요청하신 대로 EVALUATION.md의 원본 평가 문항에 정확히 근거하여, 소스코드 스니펫과 GitHub 상대 링크를 포함한 동료평가 대비집 **EVALUATION_QA.md** 를 작성 및 원격 저장소에 배포 완료했습니다!
+  ──────
+  ### EVALUATION_QA.md 주요 구성 내용
+  동료평가 4대 평가 항목(총 18개 세부 문항) 전체에 대해 [핵심 답변] + [상세 기술 설명] + [관련 소스코드 스니펫] + [GitHub 상대 링크] + [실제 검증 명령어 및 출력] 을 1:1로 완벽히 매핑했습니다:
+
+  #### 1. 항목 1 — 실제 동작 확인 (7문항)
+
+  • Q1-1 (커밋 메시지 출력): python main.py commit 실행 흐름, src/main.py#L42-L78 /src/main.py#L42-L78 스니펫, 실제 터미널 출력.
+  • Q1-2 (PR 초안 출력): python main.py pr 실행 흐름, src/main.py#L80-L118 /src/main.py#L80-L118 스니펫, Title/Body 2단 출력 증빙.
+  • Q1-3 (API Key 누락 에러): 스택 트레이스 없는 표준 에러 출력, src/ai_client.py#L25-L34 /src/ai_client.py#L25-L34 스니펫 및 env -u AI_API_KEY 검증 명령어.
+  • Q1-4 (변경 부재 시 안내): Clean 상태 조기 감지, HEAD~1 오탐 방지, src/main.py#L52-L55 /src/main.py#L52-L55 스니펫.
+  • Q1-5 (PR 3대 섹션/불릿 강제): ## Why, ## What, ## How to Test 및 -  불릿 보정 로직, src/validator.py#L61-L85 /src/validator.py#L61-L85 스니펫.
+  • Q1-6 (CLI 옵션 변경 동작): -temperature, -max-tokens, -model 옵션 상속, src/main.py#L120-L148 /src/main.py#L120-L148 스니펫.
+  • Q1-7 (길이 규칙 준수): 커밋 제목 72자, PR 제목 80자 하드 컷 및 [WARN] 로깅, src/validator.py#L23-L25 /src/validator.py#L23-L25 스니펫.
+  #### 2. 항목 2 — 코드 구조와 설계 이유 설명 (4문항)
+  • Q2-1 (Git 수집 / AI 호출 분리 이유): 단일 책임 원칙(SRP)과 관심사 분리(SoC)를 통한 독립 단위 테스트 용이성 설명.
+  • Q2-2 (프롬프트 구성 / 출력 포맷팅 분리 이유): "확률적 생성 유도(Prompt)"와 "결정론적 사후 보증(Validator)"의 역할 분리 설명.
+  • Q2-3 (CLI 옵션 설계 이유): 코드 수정 없는 재현성/실험 용이성 및 -safe-mode 운영 유연성 설명.
+  • Q2-4 (오류 처리 방식 및 이유): 트레이스백 차단 및 사용자가 즉시 조치 가능한 실행 가이드(Actionable Guidance) 제공 원칙 설명.
+
+  #### 3. 항목 3 — AI API 파라미터·프롬프트 이해 (4문항)
+  • Q3-1 (Temperature의 영향): 소프트맥스 확률 분포 평평화 원리, 낮은 값(0.3)의 사실 기반 요약 vs 높은 값의 규칙 이탈 위험 설명.
+  • Q3-2 (Max Tokens의 영향 및 설정 기준): 무한 생성 차단 및 PR 본문 문장 절삭 방지를 위한 1024 최적화 기준 설명.
+  • Q3-3 (프롬프트 구성 정보 및 이유): 페르소나, 코드 블록 격리(```diff), 브랜치 맥락 주입, 네거티브 프롬프트 설명.
+  • Q3-4 (후처리 vs 재생성 선택 이유): API 재호출로 인한 2배의 비용과 지연(Latency)을 차단하고 1회 정밀 호출 후 0.001초 만에 규격을 확정하는 후처리(Post-processing) 방식 채택 근거 설명.
+  #### 4. 항목 4 — 안전성·실무 적용 판단 (3문항)
+
+  • Q4-1 (AI 생성 텍스트 검토 필요성): 문법적 변경 너머의 기획 의도 부재 및 환각(Hallucination) 방지를 위한 Human-in-the-loop 원칙 설명.
+  • Q4-2 (Git diff 민감정보 마스킹 방안): 설정 파일/코드 내 시크릿 노출 상황 및 9종 정규표현식 기반 -safe-mode 마스킹 정책(src/git_collector.py /src/git_collector.py) 설명.
+  • Q4-3 (실무 팀 적용 시 개선 우선순위): 1순위 Git Pre-commit Hook 연동 & 대화형 에디터 모드, 2순위 gh pr create 원클릭 연동 로드맵 제시.
+  #### 5. 전체 18개 문항 추적 매트릭스 (Traceability Matrix)
+  • 평가 항목별 핵심 검증 대상, 구현 소스코드 링크, 단위 테스트 링크를 표 하나로 총정리.
+  ──────
+  ### 저장소 동기화 상태
+
+  • 생성 파일: EVALUATION_QA.md
+  • 작업 메모리 기록: activity_log.md
+  • Git 커밋 및 푸시: ac580f0 https://github.com/nttkor/b3_2/commit/ac580f0 (GitHub origin/main 반영 완료)
+  • 단위 테스트: 14개 테스트 전원 통과 (0.059s)
+  • 작업 트리: 완전히 깨끗한 클린 상태
+
+  보고 시각: 2026-10-03 18:13:51 (KST)
