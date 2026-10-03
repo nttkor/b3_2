@@ -126,6 +126,13 @@
     - Added explicit anchor tags `<a id="qX-Y"></a>` for guaranteed GitHub markdown rendering.
     - Linked table items (`[**Item X-Y**](#qX-Y)`) in Section 5 back to their corresponding question headings.
   - Verified 14/14 unit tests passing.
+- **2026-10-03 21:05 (KST)**:
+  - Fully populated and enriched code links across all 18 questions in `docs/EVALUATION_QA.md`:
+    - Added explicit `* **관련 소스코드**:` sections and code snippets with exact line links for Q2-1, Q2-2, Q2-3, Q2-4, Q3-1, Q3-2, Q3-3, Q3-4, Q4-1, Q4-2, Q4-3.
+    - Linked all unit test methods (`tests/test_assistant.py#L...`) and deep study notes across the document.
+    - Completed 100% clickable links in the Section 5 Traceability Matrix table (source code lines + test methods/deep links).
+  - Verified 14/14 unit tests passing.
+
 
 
 
